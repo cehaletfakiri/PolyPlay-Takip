@@ -155,4 +155,15 @@ function modalS(tip, ki) {
     const h = hesapla(kayitlar[ki]);
     const d = new Date().toISOString().split('T')[0];
     
-    if
+    if (tip === 'sayim') {
+        if(v > h.kalan) { alert('Hata: Kalan stok mevcut olandan fazla olamaz!'); return; }
+        kayitlar[ki].hareketler.push({ tip: 'sayim', kalan: v, onceki: h.kalan, tahsilat: t, tarih: d });
+    } else {
+        kayitlar[ki].hareketler.push({ tip: 'ilave', adet: v, tarih: d });
+    }
+    save(); closeModal(); render();
+}
+
+render();
+</script>
+</body></html>
