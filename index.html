@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="tr"><head><meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>PolyPlay Pro</title>
+<title>PolyPlay — Yönetim</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap');
 :root{ --bg:#0f0f0f; --bg2:#1a1a1a; --border:#2e2e2e; --text:#f0f0f0; --text2:#888; --accent:#ff5733; --green:#22c55e; --yellow:#f59e0b; --red:#ef4444; --radius:12px; }
@@ -10,17 +10,15 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);max
 .header{padding:20px 16px; display:flex; justify-content:space-between; align-items:center}
 .stats{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:0 16px 16px}
 .s-card{background:var(--bg2);border:0.5px solid var(--border);border-radius:var(--radius);padding:14px}
-.s-label{font-size:10px;color:var(--text2);margin-bottom:4px;text-transform:uppercase}
 .s-val{font-size:20px;font-weight:600;font-family:'DM Mono',monospace}
 .tabs{display:flex;gap:4px;padding:8px 16px;position:sticky;top:0;background:var(--bg);z-index:10}
-.tab{flex:1;padding:12px;font-size:13px;font-weight:500;border:0.5px solid var(--border);border-radius:8px;background:var(--bg2);color:var(--text2);text-align:center;cursor:pointer}
+.tab{flex:1;padding:12px;font-size:13px;border:0.5px solid var(--border);border-radius:8px;background:var(--bg2);color:var(--text2);text-align:center;cursor:pointer}
 .tab.on{background:var(--accent);color:#fff;border-color:var(--accent)}
-.content{padding:0 16px}
 .card{background:var(--bg2);border:0.5px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:12px}
 .pill{display:inline-block;padding:4px 8px;border-radius:6px;font-size:11px;background:#242424;margin-right:4px;border:1px solid var(--border)}
 .btn-sm{padding:10px;font-size:12px;border-radius:6px;border:1px solid var(--border);background:#242424;color:var(--text);cursor:pointer;flex:1}
 .w-block{background:#242424;padding:12px;border-radius:8px;margin-top:10px;border-left:3px solid var(--accent);position:relative}
-.del-btn{position:absolute;right:10px;bottom:10px;padding:4px 8px;font-size:10px;background:rgba(239,68,68,0.1);color:var(--red);border:1px solid var(--red);border-radius:4px;cursor:pointer}
+.del-btn{position:absolute;right:10px;bottom:10px;padding:4px 8px;font-size:10px;background:rgba(239,68,68,0.1);color:var(--red);border:1px solid var(--red);border-radius:4px}
 .field{margin-bottom:12px}
 .field label{display:block;font-size:11px;color:var(--text2);margin-bottom:4px}
 .field input, .field select{width:100%;background:#242424;border:1px solid var(--border);border-radius:8px;padding:12px;color:#fff;outline:none}
@@ -30,7 +28,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);max
 </style>
 </head>
 <body>
-<div class="header"><strong>Poly<span>Play</span></strong><span id="top-date" style="font-size:12px;color:var(--text2)"></span></div>
+<div class="header"><strong>Poly<span>Play</span></strong><span style="font-size:12px;color:var(--text2)">12 Mayıs 2026</span></div>
 <div id="stats-grid" class="stats"></div>
 <div class="tabs">
     <div class="tab" id="tab-yeni" onclick="setTab('yeni')">Yeni</div>
@@ -45,109 +43,90 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);max
 <script>
 const PRICE = 75;
 let kayitlar = JSON.parse(localStorage.getItem('pp_k') || '[]');
-let noktalar = JSON.parse(localStorage.getItem('pp_n') || '["Ucuzluk","Kırtasiye","Pastane","Erkut büfe"]');
+let noktalar = JSON.parse(localStorage.getItem('pp_n') || '["Erkut büfe","Pastane","Kırtasiye","Ucuzluk"]');
 let tab = 'liste';
 
 const save = () => { localStorage.setItem('pp_k', JSON.stringify(kayitlar)); localStorage.setItem('pp_n', JSON.stringify(noktalar)); };
 const setTab = (t) => { tab = t; render(); };
 const closeModal = () => document.getElementById('modal-bg').classList.add('hidden');
-const fmtDate = (d) => { if(!d) return ''; const p = d.split('-'); return p.length === 3 ? `${p[2]}.${p[1]}.${p[0].slice(-2)}` : d; };
+const fmt = (d) => { if(!d) return ''; const p = d.split('-'); return p.length === 3 ? `${p[2]}.${p[1]}.${p[0].slice(-2)}` : d; };
 
 function hesapla(k) {
     let ilave = k.hareketler.filter(h => h.tip === 'ilave').reduce((a, b) => a + Number(b.adet || 0), 0);
-    let baslangic = Number(k.stok || 0);
-    let toplam_birakilan = baslangic + ilave;
-    
-    let satilan = 0, tahsil_edilen = 0;
-    k.hareketler.forEach(h => {
-        if (h.tip === 'sayim') {
-            satilan += (Number(h.onceki) - Number(h.kalan));
-            tahsil_edilen += Number(h.alinan_tutar || 0);
-        }
-    });
-    
-    return { 
-        br: toplam_birakilan, 
-        s: satilan, 
-        kalan: toplam_birakilan - satilan, 
-        bekleyen: (satilan * PRICE) - tahsil_edilen,
-        gelir: (satilan * PRICE)
-    };
+    let tb = Number(k.stok || 0) + ilave;
+    let satilan = k.hareketler.filter(h => h.tip === 'sayim').reduce((a, b) => a + (Number(b.onceki) - Number(b.kalan)), 0);
+    return { tb, satilan, kalan: tb - satilan };
 }
 
 function render() {
-    document.getElementById('top-date').textContent = new Date().toLocaleDateString('tr-TR');
-    document.querySelectorAll('.tab').forEach(t => t.classList.remove('on'));
-    document.getElementById('tab-' + tab).classList.add('on');
-    const el = document.getElementById('content');
-
-    let g_br = 0, g_s = 0, g_b = 0, g_income = 0;
-    kayitlar.forEach(k => {
+    const {tb, ts} = kayitlar.reduce((acc, k) => {
         const h = hesapla(k);
-        g_br += h.br; g_s += h.s; g_b += h.bekleyen; g_income += h.gelir;
-    });
+        acc.tb += h.tb; acc.ts += h.satilan;
+        return acc;
+    }, {tb:0, ts:0});
 
     document.getElementById('stats-grid').innerHTML = `
-        <div class="s-card"><div class="s-label">T. Bırakılan</div><div class="s-val">${g_br}</div></div>
-        <div class="s-card"><div class="s-label">T. Satılan</div><div class="s-val" style="color:var(--green)">${g_s}</div></div>
-        <div class="s-card"><div class="s-label">Bekleyen Borç</div><div class="s-val" style="color:var(--yellow)">${g_b}₺</div></div>
-        <div class="s-card"><div class="s-label">Kümülatif Gelir</div><div class="s-val" style="color:var(--green)">${g_income}₺</div></div>`;
+        <div class="s-card"><div style="font-size:10px;color:var(--text2)">TOPLAM SATILAN</div><div class="s-val" style="color:var(--green)">${ts}</div></div>
+        <div class="s-card"><div style="font-size:10px;color:var(--text2)">KÜMÜLATİF GELİR</div><div class="s-val">${ts * PRICE}₺</div></div>`;
+
+    const el = document.getElementById('content');
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('on'));
+    document.getElementById('tab-' + tab).classList.add('on');
 
     if (tab === 'yeni') {
-        el.innerHTML = `<div class="card"><h3>Stand Kurulumu</h3><br>
+        el.innerHTML = `<div class="card"><h3>Yeni Stand</h3><br>
             <div class="field"><label>Nokta</label><select id="n-bufe">${noktalar.map(n => `<option>${n}</option>`).join('')}</select></div>
             <div class="field"><label>Başlangıç Stok</label><input type="number" id="n-stok" value="61"></div>
-            <div class="field"><label>Tarih</label><input type="date" id="n-tarih" value="${new Date().toISOString().split('T')[0]}"></div>
-            <button class="btn-sm" style="width:100%;background:var(--accent);color:#fff;font-weight:600" onclick="yeniEkle()">Kaydı Tamamla</button></div>`;
+            <button class="btn-sm" style="width:100%;background:var(--accent);color:#fff" onclick="yeniEkle()">Kaydet</button></div>`;
     } else if (tab === 'liste') {
-        el.innerHTML = kayitlar.length ? kayitlar.map((k, ki) => {
+        el.innerHTML = kayitlar.map((k, ki) => {
             const h = hesapla(k);
             return `<div class="card">
                 <div style="font-size:18px;font-weight:600">${k.bufe}</div>
-                <div style="font-size:11px;color:var(--text2);margin-bottom:10px">Açılış: ${fmtDate(k.tarih)} · İlk Stok: ${k.stok}</div>
-                <div><span class="pill">Bırakılan: ${h.br}</span><span class="pill" style="color:var(--green)">Satılan: ${h.s}</span><span class="pill" style="color:var(--yellow)">Kalan: ${h.kalan}</span></div>
-                <div class="pill" style="margin-top:8px;color:#5982f6;background:rgba(89,130,246,0.1)">Rafta Bekleyen: ${h.bekleyen}₺</div>
+                <div style="font-size:11px;color:var(--text2);margin-bottom:10px">Açılış: ${fmt(k.tarih)}</div>
+                <div class="pills">
+                    <span class="pill">Bırakılan: ${h.tb}</span>
+                    <span class="pill" style="color:var(--green)">Satılan: ${h.satilan}</span>
+                    <span class="pill" style="color:var(--yellow)">Kalan: ${h.kalan}</span>
+                </div>
                 <div style="display:flex;gap:6px;margin-top:12px">
                     <button class="btn-sm" style="color:var(--green)" onclick="openM('sayim',${ki})">Sayım</button>
                     <button class="btn-sm" onclick="openM('ilave',${ki})">İlave</button>
                     <button class="btn-sm" style="color:var(--red)" onclick="if(confirm('Sil?')){kayitlar.splice(${ki},1);save();render();}">Sil</button>
                 </div>
-                ${k.hareketler.map((hr, hi) => `
+                ${k.hareketler.slice().reverse().map((hr, hi) => `
                     <div class="w-block" style="border-left-color:${hr.tip === 'sayim' ? 'var(--green)' : 'var(--accent)'}">
-                        <div class="w-row"><strong>${hr.tip === 'sayim' ? 'Sayıldı' : 'İlave'}</strong> <span>${fmtDate(hr.tarih)}</span></div>
-                        <div class="w-row">${hr.tip === 'sayim' ? 'Dönem Satış: ' + (Number(hr.onceki) - Number(hr.kalan)) : 'Eklenen: ' + hr.adet} adet</div>
-                        <button class="del-btn" onclick="kayitlar[${ki}].hareketler.splice(${hi},1);save();render();">sil</button>
-                    </div>`).reverse().join('')}
-            </div>`}).join('') : '<div style="text-align:center;padding:40px;color:var(--text2)">Kayıt yok.</div>';
+                        <div style="font-size:12px"><strong>${hr.tip === 'sayim' ? 'Sayıldı' : 'İlave'}</strong> — ${fmt(hr.tarih)}</div>
+                        <div style="font-size:11px;color:var(--text2)">${hr.tip === 'sayim' ? 'Satılan: ' + (hr.onceki - hr.kalan) : 'Miktar: ' + hr.adet}</div>
+                    </div>`).join('')}
+            </div>`}).join('');
     } else {
-        el.innerHTML = `<div class="card"><h3>Nokta Yönetimi</h3><br>
-            ${noktalar.map((n, i) => `<div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid #222">${n}<button class="btn-sm" style="flex:none" onclick="noktalar.splice(${i},1);save();render();">Sil</button></div>`).join('')}
-            <div style="display:flex;gap:5px;margin-top:15px"><input type="text" id="yn" placeholder="Yeni..." style="flex:1;padding:10px;background:#242424;border:1px solid #333;color:#fff;border-radius:6px"><button class="btn-sm" style="flex:none" onclick="const v=document.getElementById('yn').value;if(v){noktalar.push(v);save();render();}">Ekle</button></div></div>`;
+        el.innerHTML = `<div class="card"><h3>Noktalar</h3><br>
+            ${noktalar.map((n, i) => `<div style="display:flex;justify-content:space-between;padding:10px 0">${n}<button class="btn-sm" style="flex:none" onclick="noktalar.splice(${i},1);save();render();">Sil</button></div>`).join('')}
+            <input type="text" id="yn" placeholder="Yeni nokta..." style="width:100%;padding:10px;margin-top:10px;background:#242424;border:1px solid #333;color:#fff;border-radius:8px">
+            <button class="btn-sm" style="width:100%;margin-top:8px" onclick="const v=document.getElementById('yn').value;if(v){noktalar.push(v);save();render();}">Ekle</button></div>`;
     }
 }
 
 function yeniEkle() {
-    const b = document.getElementById('n-bufe').value, s = Number(document.getElementById('n-stok').value), t = document.getElementById('n-tarih').value;
-    if (!b || isNaN(s)) return;
-    kayitlar.unshift({ bufe: b, stok: s, tarih: t, hareketler: [] });
+    const b = document.getElementById('n-bufe').value, s = Number(document.getElementById('n-stok').value);
+    kayitlar.unshift({ bufe: b, stok: s, tarih: new Date().toISOString().split('T')[0], hareketler: [] });
     save(); tab = 'liste'; render();
 }
 
 function openM(tip, ki) {
-    document.getElementById('modal-inner').innerHTML = `<h3>${tip === 'sayim' ? 'Sayım Gir' : 'İlave Ekle'}</h3><br>
-        <div class="field"><label>${tip === 'sayim' ? 'Rafta Kalan Adet' : 'Eklenen Adet'}</label><input type="number" id="mv" autofocus></div>
-        <div class="field"><label>Tahsilat (Opsiyonel)</label><input type="number" id="m-alinan" value="0"></div>
-        <div class="field"><label>Tarih</label><input type="date" id="mt" value="${new Date().toISOString().split('T')[0]}"></div>
-        <button class="btn-sm" style="width:100%;background:var(--accent);color:#fff;font-weight:600" onclick="modalSave('${tip}',${ki})">Kaydet</button>`;
+    document.getElementById('modal-inner').innerHTML = `<h3>${tip === 'sayim' ? 'Sayım' : 'İlave'}</h3><br>
+        <div class="field"><label>Miktar</label><input type="number" id="mv" autofocus></div>
+        <button class="btn-sm" style="width:100%;background:var(--accent);color:#fff" onclick="modalS('${tip}',${ki})">Kaydet</button>`;
     document.getElementById('modal-bg').classList.remove('hidden');
 }
 
-function modalSave(tip, ki) {
-    const v = Number(document.getElementById('mv').value), t = document.getElementById('mt').value, alinan = Number(document.getElementById('m-alinan').value || 0);
-    if (isNaN(v)) return;
+function modalS(tip, ki) {
+    const v = Number(document.getElementById('mv').value);
     const h = hesapla(kayitlar[ki]);
-    if (tip === 'sayim') kayitlar[ki].hareketler.push({ tip: 'sayim', kalan: v, onceki: h.kalan, alinan_tutar: alinan, tarih: t });
-    else kayitlar[ki].hareketler.push({ tip: 'ilave', adet: v, tarih: t });
+    const d = new Date().toISOString().split('T')[0];
+    if (tip === 'sayim') kayitlar[ki].hareketler.push({ tip: 'sayim', kalan: v, onceki: h.kalan, tarih: d });
+    else kayitlar[ki].hareketler.push({ tip: 'ilave', adet: v, tarih: d });
     save(); closeModal(); render();
 }
 
