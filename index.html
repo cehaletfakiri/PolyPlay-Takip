@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<!-- saved from url=(0062)file:///C:/Users/ATA%20PC/Downloads/polyplay_konsinyasyon.html -->
+<html lang="tr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>PolyPlay — Stand Satış &amp; Takip</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap');
+
+:root{
+  --bg:#0f0f0f;
+  --bg2:#1a1a1a;
+  --bg3:#242424;
+  --border:#2e2e2e;
+  --text:#f0f0f0;
+  --text2:#888;
+  --text3:#555;
+  --green:#22c55e;
+  --green-bg:rgba(34,197,94,0.1);
+  --yellow:#f59e0b;
+  --yellow-bg:rgba(245,158,11,0.1);
+  --red:#ef4444;
+  --red-bg:rgba(239,68,68,0.1);
+  --blue:#3b82f6;
+  --blue-bg:rgba(59,130,246,0.1);
+  --accent:#ff5733;
+  --radius:12px;
+  --radius-sm:8px;
+}
+
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;max-width:480px;margin:0 auto;padding-bottom:80px}
+
+/* HEADER */
+.header{padding:20px 16px 0;display:flex;align-items:center;justify-content:space-between}
+.logo{font-size:20px;font-weight:600;letter-spacing:-0.5px}
+.logo span{color:var(--accent)}
+.header-date{font-size:12px;color:var(--text3);font-family:'DM Mono',monospace}
+
+/* STATS */
+.stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;padding:16px}
+.stat-card{background:var(--bg2);border:0.5px solid var(--border);border-radius:var(--radius);padding:14px}
+.stat-label{font-size:11px;color:var(--text2);margin-bottom:6px;letter-spacing:0.03em}
+.stat-val{font-size:26px;font-weight:600;letter-spacing:-1px;font-family:'DM Mono',monospace}
+.stat-val.green{color:var(--green)}
+.stat-val.yellow{color:var(--yellow)}
+
+/* TABS */
+.tabs{display:flex;gap:4px;padding:0 16px 12px;position:sticky;top:0;background:var(--bg);z-index:10;padding-top:8px}
+.tab{flex:1;padding:9px 4px;font-size:12px;font-weight:500;border:0.5px solid var(--border);border-radius:var(--radius-sm);cursor:pointer;background:var(--bg2);color:var(--text2);text-align:center;transition:all 0.15s;font-family:'DM Sans',sans-serif}
+.tab.on{background:var(--accent);color:#fff;border-color:var(--accent)}
+
+/* CONTENT */
+.content{padding:0 16px}
+
+/* CARDS */
+.card{background:var(--bg2);border:0.5px solid var(--border);border-radius:var(--radius);padding:14px;margin-bottom:10px}
+.card h3{font-size:14px;font-weight:600;margin-bottom:12px;color:var(--text)}
+
+/* FORM */
+.field{margin-bottom:10px}
+.field label{display:block;font-size:12px;color:var(--text2);margin-bottom:5px;font-weight:500}
+.field input,.field select,.field textarea{width:100%;background:var(--bg3);border:0.5px solid var(--border);border-radius:var(--radius-sm);padding:10px 12px;font-size:14px;color:var(--text);font-family:'DM Sans',sans-serif;outline:none;transition:border-color 0.15s;-webkit-appearance:none}
+.field input:focus,.field select:focus{border-color:var(--accent)}
+.field select option{background:var(--bg3)}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+
+/* BUTTONS */
+.btn-primary{width:100%;padding:12px;font-size:14px;font-weight:600;background:var(--accent);color:#fff;border:none;border-radius:var(--radius-sm);cursor:pointer;margin-top:4px;font-family:'DM Sans',sans-serif;letter-spacing:0.01em}
+.btn-primary:active{opacity:0.85;transform:scale(0.99)}
+.btn-sm{font-size:12px;padding:6px 11px;border-radius:6px;cursor:pointer;background:var(--bg3);color:var(--text2);border:0.5px solid var(--border);font-family:'DM Sans',sans-serif;font-weight:500}
+.btn-sm:active{opacity:0.75}
+.btn-danger{color:var(--red);background:var(--red-bg);border-color:rgba(239,68,68,0.2)}
+.btn-success{color:var(--green);background:var(--green-bg);border-color:rgba(34,197,94,0.2)}
+.btn-info{color:var(--blue);background:var(--blue-bg);border-color:rgba(59,130,246,0.2)}
+
+/* STAND CARD */
+.stand-card{background:var(--bg2);border:0.5px solid var(--border);border-radius:var(--radius);padding:14px;margin-bottom:10px}
+.stand-name{font-size:16px;font-weight:600;color:var(--text);margin-bottom:2px}
+.stand-sub{font-size:11px;color:var(--text3);margin-bottom:10px;font-family:'DM Mono',monospace}
+.pills{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:10px}
+.pill{font-size:11px;padding:3px 9px;border-radius:20px;font-weight:500;font-family:'DM Mono',monospace}
+.pill-gray{background:var(--bg3);color:var(--text2);border:0.5px solid var(--border)}
+.pill-green{background:var(--green-bg);color:var(--green);border:0.5px solid rgba(34,197,94,0.2)}
+.pill-yellow{background:var(--yellow-bg);color:var(--yellow);border:0.5px solid rgba(245,158,11,0.2)}
+.pill-blue{background:var(--blue-bg);color:var(--blue);border:0.5px solid rgba(59,130,246,0.2)}
+.stand-actions{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:12px}
+
+/* WEEK BLOCK */
+.week-block{background:var(--bg3);border-radius:var(--radius-sm);padding:10px;margin-bottom:6px;border-left:2px solid var(--border)}
+.week-block.latest{border-left-color:var(--accent)}
+.week-header{font-size:11px;font-weight:600;color:var(--text2);margin-bottom:8px;font-family:'DM Mono',monospace;letter-spacing:0.02em}
+.week-row{display:flex;justify-content:space-between;align-items:center;font-size:12px;color:var(--text2);padding:3px 0}
+.week-row span{color:var(--text);font-weight:500}
+.week-footer{margin-top:8px;padding-top:8px;border-top:0.5px solid var(--border);display:flex;align-items:center;justify-content:space-between;font-size:12px;color:var(--text2)}
+.week-footer strong{color:var(--green);font-family:'DM Mono',monospace}
+.warn-block{background:rgba(245,158,11,0.08);border-radius:var(--radius-sm);padding:10px;margin-bottom:6px;border-left:2px solid var(--yellow)}
+.warn-header{font-size:11px;font-weight:600;color:var(--yellow);margin-bottom:6px}
+
+/* NOKTA CARD */
+.nokta-card{background:var(--bg3);border-radius:var(--radius-sm);padding:12px;margin-bottom:8px}
+.nokta-name{font-size:13px;font-weight:600;color:var(--text);margin-bottom:8px}
+.nokta-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:8px}
+.ns{background:var(--bg2);border-radius:6px;padding:8px;text-align:center}
+.ns-label{font-size:10px;color:var(--text3);margin-bottom:3px}
+.ns-val{font-size:16px;font-weight:600;color:var(--text);font-family:'DM Mono',monospace}
+.ns-val.g{color:var(--green)}
+.nokta-gelir{font-size:12px;color:var(--text2)}
+.nokta-gelir strong{color:var(--green);font-family:'DM Mono',monospace}
+
+/* LIST ITEM */
+.list-item{display:flex;align-items:center;gap:8px;padding:10px 0;border-bottom:0.5px solid var(--border)}
+.list-item:last-child{border-bottom:none}
+.list-item span{flex:1;font-size:14px;color:var(--text)}
+
+/* BACKUP */
+.backup-row{display:flex;gap:8px;margin-bottom:12px}
+.backup-row button{flex:1;padding:11px;font-size:13px;font-weight:500;border-radius:var(--radius-sm);cursor:pointer;font-family:'DM Sans',sans-serif}
+.backup-note{font-size:12px;color:var(--text3);line-height:1.6;padding:10px;background:var(--bg3);border-radius:var(--radius-sm)}
+
+/* ADD ROW */
+.add-row{display:flex;gap:8px}
+.add-row input{flex:1;background:var(--bg3);border:0.5px solid var(--border);border-radius:var(--radius-sm);padding:10px 12px;font-size:14px;color:var(--text);font-family:'DM Sans',sans-serif;outline:none}
+.add-row button{padding:10px 16px;font-size:13px;border-radius:var(--radius-sm);cursor:pointer;background:var(--bg3);color:var(--text);border:0.5px solid var(--border);font-family:'DM Sans',sans-serif;font-weight:500}
+
+.sep{height:0.5px;background:var(--border);margin:14px 0}
+.section-label{font-size:10px;font-weight:600;color:var(--text3);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:8px}
+.empty{text-align:center;padding:3rem 1rem;color:var(--text3);font-size:14px}
+
+/* MODAL */
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,0.7);display:flex;align-items:flex-end;justify-content:center;z-index:100;padding:16px}
+.modal{background:var(--bg2);border-radius:var(--radius) var(--radius) var(--radius-sm) var(--radius-sm);padding:20px;width:100%;max-width:480px;border:0.5px solid var(--border)}
+.modal h3{font-size:15px;font-weight:600;margin-bottom:4px}
+.modal-sub{font-size:12px;color:var(--text2);margin-bottom:14px}
+.modal-actions{display:flex;gap:8px;margin-top:14px}
+.modal-actions button{flex:1;padding:11px;font-size:13px;font-weight:500;border-radius:var(--radius-sm);cursor:pointer;font-family:'DM Sans',sans-serif}
+
+.hidden{display:none}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="logo">Poly<span>Play</span></div>
+  <div class="header-date" id="hdate">12 Mayıs 2026</div>
+</div>
+
+<div style="padding:16px 16px 0">
+  <div class="stats-grid" id="stats-grid">
+    <div class="stat-card"><div class="stat-label">Toplam bırakılan</div><div class="stat-val">0</div></div>
+    <div class="stat-card"><div class="stat-label">Toplam satılan</div><div class="stat-val green">0</div></div>
+    <div class="stat-card"><div class="stat-label">Rafta kalan</div><div class="stat-val yellow">0</div></div>
+    <div class="stat-card"><div class="stat-label">Kümülatif gelir</div><div class="stat-val green">0₺</div></div></div>
+</div>
+
+<div class="tabs">
+  <div class="tab on" id="tab-yeni" onclick="setTab(&#39;yeni&#39;)">Yeni stand</div>
+  <div class="tab" id="tab-liste" onclick="setTab(&#39;liste&#39;)">Standlar</div>
+  <div class="tab" id="tab-noktalar" onclick="setTab(&#39;noktalar&#39;)">Noktalar</div>
+</div>
+
+<div class="content" id="content"><div class="card">
+    <h3>Yeni stand kaydı</h3>
+    <div class="field"><label>Satış noktası</label>
+      <select id="n-bufe"><option value="">Seç...</option><option>Erkut büfe</option><option>Pastane</option><option>Kırtasiye</option><option>Ucuzluk</option></select>
+    </div>
+    <div class="field"><label>Not (isteğe bağlı)</label><input type="text" id="n-not" placeholder="PolyCakmak + PolyClick + PolyYumurta"></div>
+    <div class="field"><label>Başlangıç stok adeti</label><input type="number" id="n-stok" inputmode="numeric" min="0" placeholder="61"></div>
+    <div class="field"><label>Başlangıç tarihi</label><input type="date" id="n-tarih" value="2026-05-12"></div>
+    <button class="btn-primary" onclick="kayitEkle()">Kaydet</button>
+  </div></div>
+
+<!-- MODAL -->
+<div class="modal-bg hidden" id="modal-bg" onclick="modalBgClick(event)">
+  <div class="modal" id="modal-inner"></div>
+</div>
+
+<script>
+const PRICE = 75;
+let kayitlar = [];
+let noktalar = ['Erkut büfe','Pastane','Kırtasiye','Ucuzluk'];
+let tab = 'yeni';
+
+// STORAGE
+function saveK(){ try{localStorage.setItem('pp_k', JSON.stringify(kayitlar));}catch(e){} }
+function saveN(){ try{localStorage.setItem('pp_n', JSON.stringify(noktalar));}catch(e){} }
+function loadAll(){
+  try{ const k=localStorage.getItem('pp_k'); if(k) kayitlar=JSON.parse(k); }catch(e){}
+  try{ const n=localStorage.getItem('pp_n'); if(n) noktalar=JSON.parse(n); }catch(e){}
+}
+
+function today(){ return new Date().toISOString().split('T')[0]; }
+function formatDate(d){ if(!d)return''; const p=d.split('-'); return p[2]+'.'+p[1]+'.'+p[2<2?0:0]; }
+function fmt(d){ if(!d)return''; const p=d.split('-'); return p[2]+'.'+p[1]+'.'+p[0].slice(2); }
+
+function hesapla(k){
+  const ilave=k.hareketler.filter(h=>h.tip==='ilave').reduce((a,h)=>a+h.adet,0);
+  const tb=k.stok+ilave;
+  const satilan=k.hareketler.filter(h=>h.tip==='sayim').reduce((a,h)=>a+(h.onceki-h.kalan),0);
+  return{tb,satilan,kalan:tb-satilan};
+}
+
+function toplamlar(){
+  let tb=0,ts=0;
+  kayitlar.forEach(k=>{const h=hesapla(k);tb+=h.tb;ts+=h.satilan;});
+  return{tb,ts};
+}
+
+function noktaStats(n){
+  const ilgili=kayitlar.filter(k=>k.bufe===n);
+  let tb=0,ts=0;
+  ilgili.forEach(k=>{const h=hesapla(k);tb+=h.tb;ts+=h.satilan;});
+  return{tb,ts,kalan:tb-ts};
+}
+
+function grupHareketler(k){
+  const sayimler=k.hareketler.map((h,i)=>({...h,i})).filter(h=>h.tip==='sayim');
+  const ilaveler=k.hareketler.map((h,i)=>({...h,i})).filter(h=>h.tip==='ilave');
+  const bloklar=[];
+  sayimler.forEach((s,si)=>{
+    const oncekiTarih=si>0?sayimler[si-1].tarih:k.tarih;
+    const buAraIlave=ilaveler.filter(il=>il.tarih>oncekiTarih&&il.tarih<=s.tarih);
+    bloklar.push({tarih:s.tarih,birakilanTarih:oncekiTarih,
+      ilave:buAraIlave.reduce((a,h)=>a+h.adet,0),
+      ilaveHareketler:buAraIlave,sayimIndex:s.i,
+      kalan:s.kalan,satilan:s.onceki-s.kalan});
+  });
+  const sonTarih=sayimler.length?sayimler[sayimler.length-1].tarih:k.tarih;
+  const bekleyen=ilaveler.filter(il=>il.tarih>sonTarih);
+  if(bekleyen.length) bloklar.push({bekliyor:true,ilaveHareketler:bekleyen,
+    ilave:bekleyen.reduce((a,h)=>a+h.adet,0)});
+  return bloklar.reverse();
+}
+
+// EXPORT
+function exportData(){
+  const data={versiyon:1,tarih:today(),kayitlar,noktalar};
+  const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url; a.download=`polyplay_yedek_${today()}.json`; a.click();
+  URL.revokeObjectURL(url);
+}
+
+function importTrigger(){
+  const inp=document.createElement('input');
+  inp.type='file'; inp.accept='.json';
+  inp.onchange=async(e)=>{
+    const file=e.target.files[0]; if(!file)return;
+    try{
+      const data=JSON.parse(await file.text());
+      if(!data.kayitlar||!data.noktalar){alert('Geçersiz dosya.');return;}
+      if(!confirm(data.tarih+' tarihli yedek yüklensin mi?\nMevcut veriler silinecek.'))return;
+      kayitlar=data.kayitlar; noktalar=data.noktalar;
+      saveK(); saveN(); render(); alert('Veriler yüklendi.');
+    }catch(e){alert('Dosya okunamadı.');}
+  };
+  inp.click();
+}
+
+// RENDER
+function render(){
+  // Header date
+  const now=new Date();
+  document.getElementById('hdate').textContent=now.toLocaleDateString('tr-TR',{day:'2-digit',month:'long',year:'numeric'});
+
+  // Stats
+  const {tb,ts}=toplamlar();
+  document.getElementById('stats-grid').innerHTML=`
+    <div class="stat-card"><div class="stat-label">Toplam bırakılan</div><div class="stat-val">${tb}</div></div>
+    <div class="stat-card"><div class="stat-label">Toplam satılan</div><div class="stat-val green">${ts}</div></div>
+    <div class="stat-card"><div class="stat-label">Rafta kalan</div><div class="stat-val yellow">${tb-ts}</div></div>
+    <div class="stat-card"><div class="stat-label">Kümülatif gelir</div><div class="stat-val green">${(ts*PRICE).toLocaleString('tr-TR')}₺</div></div>`;
+
+  // Tabs
+  ['yeni','liste','noktalar'].forEach(t=>{
+    document.getElementById('tab-'+t).className='tab'+(tab===t?' on':'');
+  });
+
+  // Content
+  const el=document.getElementById('content');
+  if(tab==='yeni') renderYeni(el);
+  else if(tab==='liste') renderListe(el);
+  else renderNoktalar(el);
+}
+
+function setTab(t){ tab=t; render(); }
+
+function renderYeni(el){
+  el.innerHTML=`<div class="card">
+    <h3>Yeni stand kaydı</h3>
+    <div class="field"><label>Satış noktası</label>
+      <select id="n-bufe"><option value="">Seç...</option>${noktalar.map(b=>`<option>${b}</option>`).join('')}</select>
+    </div>
+    <div class="field"><label>Not (isteğe bağlı)</label><input type="text" id="n-not" placeholder="PolyCakmak + PolyClick + PolyYumurta"></div>
+    <div class="field"><label>Başlangıç stok adeti</label><input type="number" id="n-stok" inputmode="numeric" min="0" placeholder="61"></div>
+    <div class="field"><label>Başlangıç tarihi</label><input type="date" id="n-tarih" value="${today()}"></div>
+    <button class="btn-primary" onclick="kayitEkle()">Kaydet</button>
+  </div>`;
+}
+
+function renderListe(el){
+  if(!kayitlar.length){el.innerHTML='<div class="empty">Henüz kayıt yok</div>';return;}
+  el.innerHTML=kayitlar.map((k,ki)=>{
+    const {tb,satilan,kalan}=hesapla(k);
+    const bloklar=grupHareketler(k);
+    const bloklarHtml=bloklar.length?bloklar.map((b,bi)=>{
+      if(b.bekliyor) return`<div class="warn-block">
+        <div class="warn-header">Sayım bekleniyor</div>
+        ${b.ilaveHareketler.map(h=>`<div class="week-row">${fmt(h.tarih)} ilave
+          <span>+${h.adet} adet <button class="btn-sm btn-danger" onclick="silHareket(${ki},${h.i})">sil</button></span>
+        </div>`).join('')}
+      </div>`;
+      return`<div class="week-block${bi===0?' latest':''}">
+        <div class="week-header">${fmt(b.birakilanTarih)} → ${fmt(b.tarih)}</div>
+        ${b.ilave?`<div class="week-row">İlave götürülen <span>+${b.ilave} adet</span></div>`:''}
+        <div class="week-row">Rafta sayılan <span>${b.kalan} adet</span></div>
+        <div class="week-row">Bu dönem satılan <span>${b.satilan} adet</span></div>
+        <div class="week-footer">
+          <span>Tahsil edilecek: <strong>${(b.satilan*PRICE).toLocaleString('tr-TR')}₺</strong></span>
+          <button class="btn-sm btn-danger" onclick="silHareket(${ki},${b.sayimIndex})">sil</button>
+        </div>
+      </div>`;
+    }).join(''):'<div style="font-size:12px;color:var(--text3);padding:4px 0">Henüz hareket yok</div>';
+
+    return`<div class="stand-card">
+      <div class="stand-name">${k.bufe}</div>
+      <div class="stand-sub">Açılış ${fmt(k.tarih)} · İlk stok ${k.stok}${k.not?' · '+k.not:''}</div>
+      <div class="pills">
+        <span class="pill pill-gray">Bırakılan: ${tb}</span>
+        <span class="pill pill-green">Satılan: ${satilan}</span>
+        <span class="pill pill-yellow">Kalan: ${kalan}</span>
+        <span class="pill pill-blue">Rafta bekleyen: ${(kalan*PRICE).toLocaleString('tr-TR')}₺</span>
+      </div>
+      <div class="stand-actions">
+        <button class="btn-sm btn-success" onclick="openModal('sayim',${ki})">Sayım gir</button>
+        <button class="btn-sm" onclick="openModal('ilave',${ki})">İlave ekle</button>
+        <button class="btn-sm" onclick="openModal('duzenle',${ki})">Düzenle</button>
+        <button class="btn-sm btn-danger" onclick="silKayit(${ki})">Sil</button>
+      </div>
+      ${bloklarHtml}
+    </div>`;
+  }).join('');
+}
+
+function renderNoktalar(el){
+  const aktif=noktalar.filter(n=>kayitlar.some(k=>k.bufe===n));
+  let html='';
+  if(aktif.length){
+    html+=`<div class="section-label">Aktif noktalar</div>`;
+    html+=aktif.map(n=>{
+      const s=noktaStats(n);
+      return`<div class="nokta-card">
+        <div class="nokta-name">${n}</div>
+        <div class="nokta-stats">
+          <div class="ns"><div class="ns-label">Bırakılan</div><div class="ns-val">${s.tb}</div></div>
+          <div class="ns"><div class="ns-label">Satılan</div><div class="ns-val g">${s.ts}</div></div>
+          <div class="ns"><div class="ns-label">Kalan</div><div class="ns-val">${s.kalan}</div></div>
+        </div>
+        <div class="nokta-gelir">Kümülatif gelir: <strong>${(s.ts*PRICE).toLocaleString('tr-TR')}₺</strong></div>
+      </div>`;
+    }).join('');
+    html+=`<div class="sep"></div>`;
+  }
+  html+=`<div class="card">
+    <h3>Tüm noktalar</h3>
+    <div id="nokta-list">
+    ${noktalar.map((b,i)=>`<div class="list-item">
+      <span>${b}</span>
+      <button class="btn-sm btn-danger" onclick="silNokta(${i})">Sil</button>
+    </div>`).join('')}
+    </div>
+    <div class="sep"></div>
+    <div class="add-row">
+      <input type="text" id="yeni-nokta" placeholder="Yeni satış noktası...">
+      <button onclick="noktaEkle()">Ekle</button>
+    </div>
+  </div>
+  <div class="sep"></div>
+  <div class="section-label">Yedekleme</div>
+  <div class="backup-row">
+    <button class="btn-sm btn-info" onclick="exportData()">Dışa aktar</button>
+    <button class="btn-sm" onclick="importTrigger()">İçe aktar</button>
+  </div>
+  <div class="backup-note">Dışa aktar → JSON dosyası iner, WP/Telegram ile istediğin cihaza gönder. İçe aktar → o dosyayı seç, tüm veriler yüklenir.</div>`;
+  el.innerHTML=html;
+}
+
+// MODAL
+function openModal(tip,ki){
+  const k=kayitlar[ki];
+  const {kalan:suanKalan}=hesapla(k);
+  let ic='';
+  if(tip==='sayim'){
+    ic=`<h3>Sayım — ${k.bufe}</h3>
+    <div class="modal-sub">Sistemde <strong>${suanKalan}</strong> adet görünüyor. Rafta saydığın adeti gir:</div>
+    <div class="field"><label>Rafta kalan adet</label><input type="number" id="m-val" inputmode="numeric" min="0" placeholder="0"></div>
+    <div class="field"><label>Tarih</label><input type="date" id="m-tarih" value="${today()}"></div>`;
+  } else if(tip==='ilave'){
+    ic=`<h3>İlave ekle — ${k.bufe}</h3>
+    <div class="modal-sub">Götürdüğün adet:</div>
+    <div class="field"><input type="number" id="m-val" inputmode="numeric" min="1" placeholder="10"></div>
+    <div class="field"><label>Tarih</label><input type="date" id="m-tarih" value="${today()}"></div>`;
+  } else if(tip==='duzenle'){
+    ic=`<h3>Kaydı düzenle</h3>
+    <div class="field"><label>Satış noktası</label>
+      <select id="m-bufe">${noktalar.map(b=>`<option ${b===k.bufe?'selected':''}>${b}</option>`).join('')}</select>
+    </div>
+    <div class="field"><label>Not</label><input type="text" id="m-not" value="${k.not||''}"></div>
+    <div class="field"><label>Başlangıç stok</label><input type="number" id="m-stok" inputmode="numeric" value="${k.stok}" min="0"></div>
+    <div class="field"><label>Başlangıç tarihi</label><input type="date" id="m-tarih" value="${k.tarih}"></div>`;
+  }
+  document.getElementById('modal-inner').innerHTML=ic+`
+    <div class="modal-actions">
+      <button class="btn-sm" onclick="closeModal()">İptal</button>
+      <button class="btn-primary" style="margin-top:0" onclick="modalKaydet('${tip}',${ki})">Kaydet</button>
+    </div>`;
+  document.getElementById('modal-bg').classList.remove('hidden');
+}
+
+function closeModal(){ document.getElementById('modal-bg').classList.add('hidden'); }
+function modalBgClick(e){ if(e.target.id==='modal-bg') closeModal(); }
+
+function modalKaydet(tip,ki){
+  const k=kayitlar[ki];
+  const {kalan:suanKalan}=hesapla(k);
+  if(tip==='sayim'){
+    const val=parseInt(document.getElementById('m-val').value);
+    const tarih=document.getElementById('m-tarih').value;
+    if(isNaN(val)||val<0){alert('Geçersiz değer.');return;}
+    if(val>suanKalan){alert('Kalan mevcut stoktan fazla olamaz.');return;}
+    k.hareketler.push({tip:'sayim',tarih,kalan:val,onceki:suanKalan});
+  } else if(tip==='ilave'){
+    const val=parseInt(document.getElementById('m-val').value);
+    const tarih=document.getElementById('m-tarih').value;
+    if(!val||val<1){alert('Geçersiz adet.');return;}
+    k.hareketler.push({tip:'ilave',tarih,adet:val});
+  } else if(tip==='duzenle'){
+    k.bufe=document.getElementById('m-bufe').value;
+    k.not=document.getElementById('m-not').value.trim();
+    k.stok=parseInt(document.getElementById('m-stok').value)||k.stok;
+    k.tarih=document.getElementById('m-tarih').value;
+  }
+  saveK(); closeModal(); render();
+}
+
+function kayitEkle(){
+  const bufe=document.getElementById('n-bufe').value;
+  const not=document.getElementById('n-not').value.trim();
+  const stok=parseInt(document.getElementById('n-stok').value)||0;
+  const tarih=document.getElementById('n-tarih').value;
+  if(!bufe||!tarih){alert('Satış noktası ve tarih zorunlu.');return;}
+  kayitlar.unshift({id:Date.now(),bufe,not,stok,tarih,hareketler:[]});
+  saveK(); tab='liste'; render();
+}
+
+function silKayit(ki){
+  if(!confirm(kayitlar[ki].bufe+' kaydı silinsin mi?'))return;
+  kayitlar.splice(ki,1); saveK(); render();
+}
+
+function silHareket(ki,hi){
+  if(!confirm('Bu hareket silinsin mi?'))return;
+  kayitlar[ki].hareketler.splice(hi,1); saveK(); render();
+}
+
+function noktaEkle(){
+  const v=document.getElementById('yeni-nokta').value.trim();
+  if(!v)return;
+  if(noktalar.includes(v)){alert('Zaten var.');return;}
+  noktalar.push(v); saveN(); render(); setTab('noktalar');
+}
+
+function silNokta(i){
+  if(!confirm(noktalar[i]+' silinsin mi?'))return;
+  noktalar.splice(i,1); saveN(); render(); setTab('noktalar');
+}
+
+// INIT
+loadAll();
+render();
+</script>
+
+
+</body></html>
