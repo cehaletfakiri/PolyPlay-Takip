@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="tr"><head><meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>PolyPlay — Yönetim</title>
+<title>PolyPlay — Tahsilat Takip</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap');
 :root{ --bg:#0f0f0f; --bg2:#1a1a1a; --border:#2e2e2e; --text:#f0f0f0; --text2:#888; --accent:#ff5733; --green:#22c55e; --yellow:#f59e0b; --red:#ef4444; --radius:12px; }
@@ -40,18 +40,12 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);max
 </div>
 
 <script>
-// Hafızadan fiyatı al, yoksa 75 yap
-let PRICE = Number(localStorage.getItem('pp_price') || 75);
+const PRICE = 75;
 let kayitlar = JSON.parse(localStorage.getItem('pp_k') || '[]');
 let noktalar = JSON.parse(localStorage.getItem('pp_n') || '["Erkut büfe","Pastane","Kırtasiye","Ucuzluk"]');
 let tab = 'liste';
 
-const save = () => { 
-    localStorage.setItem('pp_k', JSON.stringify(kayitlar)); 
-    localStorage.setItem('pp_n', JSON.stringify(noktalar)); 
-    localStorage.setItem('pp_price', PRICE);
-};
-
+const save = () => { localStorage.setItem('pp_k', JSON.stringify(kayitlar)); localStorage.setItem('pp_n', JSON.stringify(noktalar)); };
 const setTab = (t) => { tab = t; render(); };
 const closeModal = () => document.getElementById('modal-bg').classList.add('hidden');
 const fmt = (d) => { if(!d) return ''; const p = d.split('-'); return p.length === 3 ? `${p[2]}.${p[1]}.${p[0].slice(-2)}` : d; };
@@ -65,17 +59,11 @@ function hesapla(k) {
     return { tb, satilan, kalan: tb - satilan, tahsil_edilen, bekleyen };
 }
 
-function updatePrice(val) {
-    PRICE = Number(val);
-    save();
-    render();
-}
-
 function render() {
-    let g_tahsil = 0, g_bekleyen = 0;
+    let g_ts = 0, g_tahsil = 0, g_bekleyen = 0;
     kayitlar.forEach(k => {
         const h = hesapla(k);
-        g_tahsil += h.tahsil_edilen; g_bekleyen += h.bekleyen;
+        g_ts += h.satilan; g_tahsil += h.tahsil_edilen; g_bekleyen += h.bekleyen;
     });
 
     document.getElementById('hdate').textContent = new Date().toLocaleDateString('tr-TR');
@@ -105,7 +93,7 @@ function render() {
                 <div style="display:flex;gap:6px;margin-top:12px">
                     <button class="btn-sm" style="color:var(--green)" onclick="openM('sayim',${ki})">Sayım & Tahsilat</button>
                     <button class="btn-sm" onclick="openM('ilave',${ki})">İlave</button>
-                    <button class="btn-sm" style="color:var(--red)" onclick="if(confirm('Emin misin?')){kayitlar.splice(${ki},1);save();render();}">Kaldır</button>
+                    <button class="btn-sm" style="color:var(--red)" onclick="if(confirm('Tüm stand kaydı silinecek?')){kayitlar.splice(${ki},1);save();render();}">Standı Kaldır</button>
                 </div>
                 ${k.hareketler.slice().reverse().map(hr => `
                     <div class="w-block" style="border-left-color:${hr.tip === 'sayim' ? 'var(--green)' : 'var(--accent)'}">
@@ -116,21 +104,10 @@ function render() {
                     </div>`).join('')}
             </div>`}).join('');
     } else {
-        el.innerHTML = `
-            <div class="card">
-                <h3>Birim Fiyat Ayarı</h3><br>
-                <div class="field">
-                    <label>Ürün Satış Fiyatı (₺)</label>
-                    <input type="number" value="${PRICE}" onchange="updatePrice(this.value)" style="border-color:var(--accent)">
-                </div>
-                <p style="font-size:11px;color:var(--text2)">* Fiyatı değiştirdiğinde tüm bekleyen alacaklar otomatik yeniden hesaplanır.</p>
-            </div>
-            <div class="card">
-                <h3>Noktalar</h3><br>
-                ${noktalar.map((n, i) => `<div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:0.5px solid #333">${n}<button class="btn-sm" style="flex:none;padding:4px 8px" onclick="noktalar.splice(${i},1);save();render();">Sil</button></div>`).join('')}
-                <input type="text" id="yn" placeholder="Yeni nokta..." style="width:100%;padding:12px;margin-top:10px;background:#242424;border:1px solid #333;color:#fff;border-radius:8px">
-                <button class="btn-sm" style="width:100%;margin-top:8px" onclick="const v=document.getElementById('yn').value;if(v){noktalar.push(v);save();render();}">Ekle</button>
-            </div>`;
+        el.innerHTML = `<div class="card"><h3>Noktalar</h3><br>
+            ${noktalar.map((n, i) => `<div style="display:flex;justify-content:space-between;padding:10px 0">${n}<button class="btn-sm" style="flex:none" onclick="noktalar.splice(${i},1);save();render();">Sil</button></div>`).join('')}
+            <input type="text" id="yn" placeholder="Yeni nokta..." style="width:100%;padding:12px;margin-top:10px;background:#242424;border:1px solid #333;color:#fff;border-radius:8px">
+            <button class="btn-sm" style="width:100%;margin-top:8px" onclick="const v=document.getElementById('yn').value;if(v){noktalar.push(v);save();render();}">Ekle</button></div>`;
     }
 }
 
