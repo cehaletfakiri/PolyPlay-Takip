@@ -14,7 +14,6 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);max
 .tabs{display:flex;gap:4px;padding:8px 16px;position:sticky;top:0;background:var(--bg);z-index:10}
 .tab{flex:1;padding:10px;font-size:12px;border:0.5px solid var(--border);border-radius:8px;background:var(--bg2);color:var(--text2);text-align:center}
 .tab.on{background:var(--accent);color:#fff;border-color:var(--accent)}
-.content{padding:0 16px}
 .card{background:var(--bg2);border:0.5px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:12px}
 .field{margin-bottom:12px}
 .field label{display:block;font-size:11px;color:var(--text2);margin-bottom:4px}
@@ -29,8 +28,11 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);max
 </style>
 </head>
 <body>
-<div class="header"><strong style="font-size:20px">Poly<span>Play</span></strong><span id="hdate" style="font-size:12px;color:var(--text2)"></span></div>
-<div id="stats-grid" class="stats"></div>
+<div class="header"><strong style="font-size:20px">Poly<span>Play</span></strong><span style="font-size:12px;color:var(--text2)">12 Mayıs 2026</span></div>
+<div id="stats-grid" class="stats">
+    <div class="s-card"><div style="font-size:10px;color:var(--text2)">BEKLEYEN</div><div class="s-val" id="total-b" style="color:var(--yellow)">0₺</div></div>
+    <div class="s-card"><div style="font-size:10px;color:var(--text2)">TAHSİL EDİLEN</div><div class="s-val" id="total-t" style="color:var(--green)">0₺</div></div>
+</div>
 <div class="tabs">
     <div class="tab" id="tab-yeni" onclick="setTab('yeni')">Yeni</div>
     <div class="tab on" id="tab-liste" onclick="setTab('liste')">Standlar</div>
@@ -47,105 +49,73 @@ let noktalar = JSON.parse(localStorage.getItem('pp_n') || '["Ucuzluk","Kırtasiy
 let tab = 'liste';
 
 function save(){ localStorage.setItem('pp_k', JSON.stringify(kayitlar)); localStorage.setItem('pp_n', JSON.stringify(noktalar)); }
-function today(){ return new Date().toISOString().split('T')[0]; }
-function fmt(d){ if(!d) return '-'; let p=d.split('-'); return p.length<3 ? d : `${p[2]}.${p[1]}.${p[0].slice(2)}`; }
-
-function hesapla(k){
-    let ilave = k.hareketler.filter(h=>h.tip==='ilave').reduce((a,h)=>a+(Number(h.adet)||0),0);
-    let tb = (Number(k.stok)||0) + ilave;
-    let satilan = 0, bekleyen = 0, toplam_alinan = 0;
-    k.hareketler.filter(h=>h.tip==='sayim').forEach(h => {
-        let s = (Number(h.onceki)||0) - (Number(h.kalan)||0);
-        satilan += s;
-        let alinan = Number(h.alinan_tutar) || 0;
-        toplam_alinan += alinan;
-        bekleyen += (s * PRICE - alinan);
-    });
-    return {tb, satilan, kalan:tb-satilan, bekleyen, toplam_alinan};
-}
+function setTab(t){ tab=t; render(); }
 
 function render(){
-    document.getElementById('hdate').textContent = new Date().toLocaleDateString('tr-TR');
-    let b=0, t=0; kayitlar.forEach(k=>{ let h=hesapla(k); b+=h.bekleyen; t+=h.toplam_alinan; });
-    document.getElementById('stats-grid').innerHTML = `
-        <div class="s-card"><div style="font-size:10px;color:var(--text2)">BEKLEYEN</div><div class="s-val" style="color:var(--yellow)">${b}₺</div></div>
-        <div class="s-card"><div style="font-size:10px;color:var(--text2)">TAHSİL EDİLEN</div><div class="s-val" style="color:var(--green)">${t}₺</div></div>`;
     document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));
     document.getElementById('tab-'+tab).classList.add('on');
     const el = document.getElementById('content');
-    if(tab==='yeni') renderYeni(el); else if(tab==='liste') renderListe(el); else renderNoktalar(el);
-}
+    
+    let totalB = 0, totalT = 0;
+    kayitlar.forEach(k => {
+        let s = 0, t = 0;
+        k.hareketler.forEach(h => {
+            if(h.tip==='sayim'){
+                let satilan = (h.onceki||0) - (h.kalan||0);
+                s += satilan;
+                t += (h.alinan_tutar || 0);
+            }
+        });
+        totalT += t;
+        totalB += (s * PRICE - t);
+    });
+    document.getElementById('total-b').textContent = totalB + '₺';
+    document.getElementById('total-t').textContent = totalT + '₺';
 
-function renderYeni(el){
-    el.innerHTML = `<div class="card"><h3>Yeni Stand</h3><br>
-        <div class="field"><label>Nokta</label><select id="n-bufe">${noktalar.map(n=>`<option>${n}</option>`).join('')}</select></div>
-        <div class="field"><label>Başlangıç Stok</label><input type="number" id="n-stok" value="61"></div>
-        <div class="field"><label>Tarih</label><input type="date" id="n-tarih" value="${today()}"></div>
-        <button class="btn" onclick="kayitEkle()">Kaydet</button></div>`;
-}
-
-function renderListe(el){
-    if(!kayitlar.length) { el.innerHTML = '<div style="text-align:center;padding:40px;color:#555">Kayıt yok.</div>'; return; }
-    el.innerHTML = kayitlar.map((k,ki)=>{
-        const h = hesapla(k);
-        const hareketlerHtml = k.hareketler.filter(hr=>hr.tip==='sayim').reverse().map((hr,hi)=>{
-            const g_hi = k.hareketler.findIndex(x => x === hr);
-            const s = (Number(hr.onceki)||0)-(Number(hr.kalan)||0);
-            const borc = (s*PRICE)-(Number(hr.alinan_tutar)||0);
-            return `<div class="w-block" style="border-left-color:${borc<=0?'var(--green)':'var(--yellow)'}">
-                <div class="w-row">Tarih: <span>${fmt(hr.tarih)}</span></div>
-                <div class="w-row">Satılan: <span>${s} ad.</span></div>
-                <div class="w-row">Borç: <strong style="color:${borc<=0?'var(--green)':'var(--yellow)'}">${borc}₺</strong></div>
-                ${borc>0?`<div style="display:flex;gap:4px;margin-top:8px"><input type="number" id="t-${ki}-${g_hi}" placeholder="Miktar" style="flex:1;background:#000;border:1px solid #333;color:#fff;padding:4px;border-radius:4px;font-size:12px"><button class="btn-sm" style="color:var(--green)" onclick="tahsilat(${ki},${g_hi})">Al</button></div>`:''}
-            </div>`;
-        }).join('');
-        return `<div class="card">
-            <div style="display:flex;justify-content:space-between"><strong>${k.bufe}</strong><span style="font-size:11px;color:#555">Stok: ${h.kalan}</span></div>
-            <div style="display:flex;gap:5px;margin:12px 0">
-                <button class="btn-sm" style="color:var(--green)" onclick="openM('sayim',${ki})">Sayım</button>
-                <button class="btn-sm" onclick="openM('ilave',${ki})">İlave</button>
-                <button class="btn-sm" style="color:var(--red)" onclick="if(confirm('Sil?')){kayitlar.splice(${ki},1);save();render();}">Sil</button>
-            </div>
-            ${hareketlerHtml}
+    if(tab==='yeni') {
+        el.innerHTML = `<div class="card"><h3>Yeni Stand</h3><br>
+            <div class="field"><label>Nokta</label><select id="n-bufe">${noktalar.map(n=>`<option>${n}</option>`).join('')}</select></div>
+            <div class="field"><label>Başlangıç Stok</label><input type="number" id="n-stok" value="61"></div>
+            <button class="btn" onclick="kayitEkle()">Kaydet</button></div>`;
+    } else if(tab==='liste') {
+        el.innerHTML = kayitlar.map((k,ki)=>`
+            <div class="card">
+                <div style="display:flex;justify-content:space-between"><strong>${k.bufe}</strong></div>
+                <div style="display:flex;gap:5px;margin-top:10px">
+                    <button class="btn-sm" style="color:var(--green)" onclick="openM(${ki})">Sayım Yap</button>
+                    <button class="btn-sm" style="color:var(--red)" onclick="if(confirm('Sil?')){kayitlar.splice(${ki},1);save();render();}">Sil</button>
+                </div>
+                ${k.hareketler.map(h=>`<div class="w-block">
+                    <div class="w-row">Satılan: <span>${h.onceki-h.kalan}</span></div>
+                    <div class="w-row">Borç: <span>${(h.onceki-h.kalan)*PRICE - (h.alinan_tutar||0)}₺</span></div>
+                </div>`).join('')}
+            </div>`).join('');
+    } else {
+        el.innerHTML = `<div class="card"><h3>Noktalar</h3><br>
+            ${noktalar.map((n,i)=>`<div style="display:flex;justify-content:space-between;padding:8px 0">${n}<button class="btn-sm" onclick="noktalar.splice(${i},1);save();render();">Sil</button></div>`).join('')}
         </div>`;
-    }).join('');
+    }
 }
 
-function renderNoktalar(el){
-    el.innerHTML = `<div class="card"><h3>Noktalar</h3><br>
-        ${noktalar.map((n,i)=>`<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #222"><span>${n}</span><button class="btn-sm" onclick="noktalar.splice(${i},1);save();render();">Sil</button></div>`).join('')}
-        <div style="display:flex;gap:5px;margin-top:12px"><input type="text" id="yn" style="flex:1;padding:8px;background:#242424;border:1px solid #333;color:#fff;border-radius:4px"><button class="btn-sm" onclick="const v=document.getElementById('yn').value;if(v){noktalar.push(v);save();render();}">Ekle</button></div>
-    </div>`;
-}
-
-function tahsilat(ki,hi){
-    const v = parseInt(document.getElementById(`t-${ki}-${hi}`).value);
-    if(!v) return; kayitlar[ki].hareketler[hi].alinan_tutar = (Number(kayitlar[ki].hareketler[hi].alinan_tutar)||0)+v; save(); render();
-}
-
-function openM(tip,ki){
-    const h=hesapla(kayitlar[ki]);
-    document.getElementById('modal-inner').innerHTML = `<h3>${tip==='sayim'?'Sayım':'İlave'}</h3><br>
-        <div class="field"><label>${tip==='sayim'?'Rafta Kalan':'Adet'}</label><input type="number" id="mv"></div>
-        <div class="field"><label>Tarih</label><input type="date" id="mt" value="${today()}"></div>
-        <button class="btn" onclick="modalS('${tip}',${ki})">Kaydet</button>`;
+function openM(ki){
+    document.getElementById('modal-inner').innerHTML = `<h3>Sayım</h3><br>
+        <div class="field"><label>Kalan Adet</label><input type="number" id="mv"></div>
+        <button class="btn" onclick="modalS(${ki})">Kaydet</button>`;
     document.getElementById('modal-bg').classList.remove('hidden');
 }
 
-function modalS(tip,ki){
-    const v=parseInt(document.getElementById('mv').value), t=document.getElementById('mt').value; if(isNaN(v)) return;
-    const h=hesapla(kayitlar[ki]);
-    if(tip==='sayim') kayitlar[ki].hareketler.push({tip:'sayim',tarih:t,kalan:v,onceki:h.kalan,alinan_tutar:0});
-    else kayitlar[ki].hareketler.push({tip:'ilave',tarih:t,adet:v});
-    save(); closeModal(); render();
+function modalS(ki){
+    const v=parseInt(document.getElementById('mv').value);
+    let sonKalan = kayitlar[ki].hareketler.length > 0 ? kayitlar[ki].hareketler[kayitlar[ki].hareketler.length-1].kalan : kayitlar[ki].stok;
+    kayitlar[ki].hareketler.push({tip:'sayim', kalan:v, onceki:sonKalan, alinan_tutar:0});
+    save(); document.getElementById('modal-bg').classList.add('hidden'); render();
 }
 
 function kayitEkle(){
-    const b=document.getElementById('n-bufe').value, s=parseInt(document.getElementById('n-stok').value), t=document.getElementById('n-tarih').value;
-    if(!b || isNaN(s)) return; kayitlar.unshift({id:Date.now(),bufe:b,stok:s,tarih:t,hareketler:[]}); save(); tab='liste'; render();
+    const b=document.getElementById('n-bufe').value, s=parseInt(document.getElementById('n-stok').value);
+    kayitlar.unshift({bufe:b, stok:s, hareketler:[]});
+    save(); tab='liste'; render();
 }
-function setTab(t){ tab=t; render(); }
-function closeModal(){ document.getElementById('modal-bg').classList.add('hidden'); }
 render();
 </script>
 </body></html>
