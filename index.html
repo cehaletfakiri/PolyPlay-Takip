@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0065)file:///C:/Users/ATA%20PC/Downloads/polyplay_konsinyasyon_32.html -->
+<!-- saved from url=(0065)file:///C:/Users/ATA%20PC/Downloads/polyplay_konsinyasyon_34.html -->
 <html lang="tr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
@@ -183,6 +183,30 @@ function loadData(){
   for(const k of nkeys){try{const v=localStorage.getItem(k);if(v){const a=JSON.parse(v);if(a.length>=4){noktalar=a;break;}}}catch(e){}}
 }
 
+// ─── Data Sanitizer ──────────────────────────────────────────────────────────
+function sanitize(){
+  data = data.filter(k => k && typeof k === 'object');
+  data.forEach(k => {
+    if(!k.tarih || typeof k.tarih !== 'string') k.tarih = today();
+    if(!k.bufe) k.bufe = 'Bilinmeyen';
+    if(!k.stok || isNaN(k.stok)) k.stok = 0;
+    if(!k.fiyat || isNaN(k.fiyat)) k.fiyat = 75;
+    if(!Array.isArray(k.hareketler)) k.hareketler = [];
+    k.hareketler = k.hareketler.filter(h => h && h.tip);
+    k.hareketler.forEach(h => {
+      if(!h.tarih || typeof h.tarih !== 'string') h.tarih = k.tarih;
+      // Old sayim format: had onceki+kalan but no satilan
+      if((h.tip==='sayim'||h.tip==='ziyaret') && (h.satilan==null||isNaN(h.satilan))){
+        h.satilan = Math.max(0, (Number(h.onceki)||0) - (Number(h.kalan)||0));
+      }
+      if(h.tip==='ziyaret' && (h.iade==null||isNaN(h.iade))) h.iade = Number(h.kalan)||0;
+      if(h.tip==='ilave' && isNaN(h.adet)) h.adet = 0;
+      if(h.tip==='iade' && isNaN(h.adet)) h.adet = 0;
+      if(h.tip==='tahsilat' && isNaN(h.tutar)) h.tutar = 0;
+    });
+  });
+}
+
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 function today(){return new Date().toISOString().split('T')[0];}
 function fmt(d){try{if(!d||typeof d!=='string')return'';const p=d.split('-');if(p.length<3)return d;return p[2]+'.'+p[1]+'.'+p[0].slice(2);}catch(e){return'';}}
@@ -332,7 +356,7 @@ function rListe(el){
       '<span class="store-stat"><strong>'+tl(bc.tt)+'</strong> tahsil</span>'+
       (bc.ti>0?'<span class="store-stat"><strong>'+bc.ti+'</strong> iade</span>':'')+
       '</div>'+
-      '<div class="store-meta">Son kayıt: '+sonTarih+(tamAdet?' · '+tamAdet+' tamamlandı':'')+' →</div>'+
+      '<div class="store-meta">Son kayıt: '+(sonTarih||'—')+(tamAdet?' · '+tamAdet+' tamamlandı':'')+' →</div>'+
       '</div>';
   }).join('');
 }
@@ -343,7 +367,7 @@ function rBufePage(el,bufe){
   const items=data.filter(k=>k.bufe===bufe);
 
   // Ay listesi
-  const aylar=['tumu',...new Set(items.map(k=>k.tarih.slice(0,7))).values()].sort().reverse();
+  const rawAylar=[...new Set(items.filter(k=>k.tarih&&k.tarih.length>=7).map(k=>k.tarih.slice(0,7)))].sort().reverse(); const aylar=['tumu',...rawAylar];
   aylar[0]='tumu';
 
   // Filtre
@@ -681,7 +705,7 @@ function silN(i){
 }
 
 // ─── Init ─────────────────────────────────────────────────────────────────────
-loadData(); render();
+loadData(); sanitize(); render();
 </script>
 
 
