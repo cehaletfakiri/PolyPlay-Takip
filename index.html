@@ -3,561 +3,849 @@
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'DM Sans',sans-serif;background:#07070f;color:#e2e8f0;min-height:100vh}
 :root{--p:#7c3aed;--g:#10b981;--o:#f97316;--r:#ef4444;--y:#f59e0b;--b:#0ea5e9;--s:#64748b;--card:#0f0f1a;--border:rgba(124,58,237,0.2)}
-input,select,textarea{font-family:'DM Sans',sans-serif}
+input,select,textarea{font-family:'DM Sans',sans-serif;font-size:16px!important}
 
-/* HEADER - mobile first */
-#header{background:linear-gradient(180deg,#0a0a15,#0f0f1a);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;display:flex;flex-direction:column;align-items:center;padding:14px 0 0 0}
-#logo{font-family:'Syne',sans-serif;font-weight:800;font-size:22px;color:var(--p);letter-spacing:-0.5px;margin-bottom:8px;text-align:center}
+/* HEADER */
+#header{background:linear-gradient(180deg,#0a0a15,#0f0f1a);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;display:flex;flex-direction:column;align-items:center;padding:12px 0 0}
+#logo{font-family:'Syne',sans-serif;font-weight:800;font-size:21px;color:var(--p);letter-spacing:-.5px;margin-bottom:8px}
 #logo span{color:#f97316}
-nav{display:flex;width:100%;overflow-x:auto;padding:0 12px;gap:0;justify-content:flex-start;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+nav{display:flex;width:100%;overflow-x:auto;padding:0 8px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
 nav::-webkit-scrollbar{display:none}
-nav button{padding:12px 14px;background:none;border:none;border-bottom:2px solid transparent;color:var(--s);cursor:pointer;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;transition:all .2s;white-space:nowrap;flex-shrink:0}
+nav button{padding:11px 13px;background:none;border:none;border-bottom:2px solid transparent;color:var(--s);cursor:pointer;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;white-space:nowrap;flex-shrink:0;transition:all .2s}
 nav button.active{border-bottom-color:var(--p);color:#e2e8f0;font-weight:600}
-nav button:hover:not(.active){color:#94a3b8}
 
-@media (min-width:640px){
-  nav{justify-content:center;padding:0 24px}
-}
+/* CONTENT */
+#content{padding:16px;max-width:1280px;margin:0 auto}
+@media(min-width:640px){#content{padding:24px}}
 
-#content{padding:20px 16px;max-width:1280px;margin:0 auto}
-@media (min-width:640px){#content{padding:28px}}
+/* KARTLAR */
+.kartlar{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:20px}
+@media(min-width:480px){.kartlar{grid-template-columns:repeat(3,1fr)}}
+@media(min-width:768px){.kartlar{display:flex;flex-wrap:wrap;gap:12px}}
+.kart{background:linear-gradient(135deg,#0f0f1a,#121220);border-radius:10px;padding:14px 16px;flex:1;min-width:120px}
+.kart .kb{font-size:9px;color:var(--s);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}
+.kart .kd{font-family:'Syne',sans-serif;font-weight:700;font-size:22px}
+.kart .ka{font-size:10px;color:#475569;margin-top:2px}
 
-.kartlar{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px;margin-bottom:24px}
-@media (min-width:640px){.kartlar{display:flex;gap:14px;margin-bottom:28px;flex-wrap:wrap}}
-.kart{background:linear-gradient(135deg,#0f0f1a,#121220);border-radius:12px;padding:16px 18px;flex:1;min-width:130px}
-.kart .kbaslik{font-size:10px;color:var(--s);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px}
-.kart .kdeger{font-family:'Syne',sans-serif;font-weight:700;font-size:24px}
-@media (min-width:640px){.kart{padding:18px 22px}.kart .kdeger{font-size:26px}}
-.kart .kalt{font-size:11px;color:#475569;margin-top:3px}
+/* SECTION */
+.sec{margin-bottom:24px}
+.sec-baslik{font-family:'Syne',sans-serif;font-weight:700;font-size:16px;color:#e2e8f0;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
 
-.sec{margin-bottom:28px}
-.sec-baslik{font-family:'Syne',sans-serif;font-weight:700;font-size:16px;color:#e2e8f0;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
-@media (min-width:640px){.sec-baslik{font-size:17px}}
+/* KART LIST (tablo yerine) */
+.kart-list{display:flex;flex-direction:column;gap:8px}
+.liste-kart{background:var(--card);border:1px solid rgba(124,58,237,.15);border-radius:10px;padding:14px 16px}
+.liste-kart .lk-baslik{font-weight:600;color:#e2e8f0;font-size:14px;margin-bottom:6px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px}
+.liste-kart .lk-satirlar{display:grid;grid-template-columns:1fr 1fr;gap:4px 16px}
+@media(min-width:480px){.liste-kart .lk-satirlar{grid-template-columns:repeat(3,1fr)}}
+.lk-stat{font-size:12px;color:var(--s)}
+.lk-stat span{color:#e2e8f0;font-weight:600}
 
-/* Tables scroll on mobile */
-.tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:0 -16px;padding:0 16px}
-@media (min-width:640px){.tbl-wrap{margin:0;padding:0}}
-.tbl{width:100%;border-collapse:collapse;min-width:600px}
-.tbl th{text-align:left;padding:10px 12px;font-size:10px;color:var(--s);text-transform:uppercase;letter-spacing:.5px;border-bottom:1px solid rgba(124,58,237,0.12);white-space:nowrap}
-.tbl td{padding:12px;font-size:13px;border-bottom:1px solid rgba(255,255,255,0.04);white-space:nowrap}
-.tbl tbody tr:hover{background:rgba(124,58,237,0.04)}
+/* BADGE */
+.badge{padding:2px 9px;border-radius:20px;font-size:10px;font-weight:600;display:inline-block;white-space:nowrap}
 
-.badge{padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600;display:inline-block;white-space:nowrap}
-
-.btn{border:none;border-radius:8px;padding:8px 14px;cursor:pointer;font-size:13px;font-weight:600;font-family:'DM Sans',sans-serif;transition:opacity .2s;white-space:nowrap}
-.btn:hover{opacity:.85}
+/* BUTTONS */
+.btn{border:none;border-radius:8px;padding:8px 14px;cursor:pointer;font-size:13px;font-weight:600;font-family:'DM Sans',sans-serif;white-space:nowrap}
 .btn-p{background:var(--p);color:#fff}
 .btn-g{background:var(--g);color:#fff}
 .btn-r{background:rgba(239,68,68,.15);color:var(--r);border:1px solid rgba(239,68,68,.2)}
 .btn-y{background:rgba(245,158,11,.15);color:var(--y);border:1px solid rgba(245,158,11,.2)}
 .btn-gh{background:transparent;color:#94a3b8;border:1px solid var(--border)}
-.btn-b{background:rgba(14,165,233,.15);color:var(--b);border:1px solid rgba(14,165,233,.2)}
 .btn-sm{padding:5px 10px;font-size:11px}
 .btn-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
 
-.nokta-grid{display:grid;grid-template-columns:1fr;gap:12px}
-@media (min-width:640px){.nokta-grid{grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px}}
-.nokta-kart{background:linear-gradient(135deg,#0f0f1a,#121220);border:1px solid var(--border);border-radius:12px;padding:18px;cursor:pointer;transition:border-color .2s}
+/* NOKTA KARTLAR */
+.nokta-grid{display:grid;grid-template-columns:1fr;gap:10px}
+@media(min-width:580px){.nokta-grid{grid-template-columns:repeat(2,1fr)}}
+@media(min-width:900px){.nokta-grid{grid-template-columns:repeat(3,1fr)}}
+.nokta-kart{background:linear-gradient(135deg,#0f0f1a,#121220);border:1px solid var(--border);border-radius:12px;padding:16px;cursor:pointer;transition:border-color .2s}
 .nokta-kart:hover{border-color:rgba(124,58,237,.5)}
-.nokta-kart .nk-baslik{font-family:'Syne',sans-serif;font-weight:700;font-size:15px;color:#e2e8f0;margin-bottom:2px}
-.nokta-kart .nk-konum{font-size:11px;color:var(--s);margin-bottom:14px}
-.nokta-kart .nk-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.nokta-kart .nk-stat .nk-lbl{font-size:10px;color:var(--s);text-transform:uppercase;letter-spacing:.5px}
-.nokta-kart .nk-stat .nk-val{font-family:'Syne',sans-serif;font-weight:700;font-size:18px}
+.nk-baslik{font-family:'Syne',sans-serif;font-weight:700;font-size:15px;color:#e2e8f0;margin-bottom:2px}
+.nk-konum{font-size:11px;color:var(--s);margin-bottom:12px}
+.nk-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.nk-stat .nk-lbl{font-size:9px;color:var(--s);text-transform:uppercase;letter-spacing:.5px}
+.nk-stat .nk-val{font-family:'Syne',sans-serif;font-weight:700;font-size:17px}
 
-.overlay{position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:200;display:flex;align-items:center;justify-content:center;padding:12px}
-@media (min-width:640px){.overlay{padding:16px}}
-.modal{background:#0d0d1a;border:1px solid rgba(124,58,237,.35);border-radius:14px;padding:22px;min-width:auto;max-width:580px;width:100%;max-height:88vh;overflow-y:auto}
-@media (min-width:640px){.modal{padding:28px;min-width:420px;border-radius:16px}}
-.modal h3{font-family:'Syne',sans-serif;font-size:17px;color:#e2e8f0;margin-bottom:18px;display:flex;justify-content:space-between;align-items:center}
-@media (min-width:640px){.modal h3{font-size:18px;margin-bottom:22px}}
-.modal h3 button{background:none;border:none;color:var(--s);font-size:26px;cursor:pointer;line-height:1}
+/* MODAL */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.9);z-index:200;display:flex;align-items:flex-end;justify-content:center}
+@media(min-width:600px){.overlay{align-items:center}}
+.modal{background:#0d0d1a;border:1px solid rgba(124,58,237,.35);border-radius:16px 16px 0 0;padding:20px;width:100%;max-width:560px;max-height:92vh;overflow-y:auto}
+@media(min-width:600px){.modal{border-radius:16px;max-height:88vh}}
+.modal-baslik{font-family:'Syne',sans-serif;font-size:17px;color:#e2e8f0;margin-bottom:16px;display:flex;justify-content:space-between;align-items:center}
+.modal-baslik button{background:none;border:none;color:var(--s);font-size:28px;cursor:pointer;line-height:1;padding:0 4px}
 
-.fg{margin-bottom:14px}
-.fg label{display:block;font-size:10px;color:var(--s);text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px}
-.fg input,.fg select,.fg textarea{width:100%;background:#070710;border:1px solid rgba(124,58,237,.2);border-radius:8px;padding:10px 13px;color:#e2e8f0;font-size:14px;outline:none;font-family:'DM Sans',sans-serif}
-.fg textarea{min-height:70px;resize:vertical}
+/* FORM */
+.fg{margin-bottom:12px}
+.fg label{display:block;font-size:10px;color:var(--s);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.fg input,.fg select,.fg textarea{width:100%;background:#070710;border:1px solid rgba(124,58,237,.2);border-radius:8px;padding:10px 12px;color:#e2e8f0;outline:none}
+.fg textarea{min-height:60px;resize:vertical}
 .fg input:focus,.fg select:focus,.fg textarea:focus{border-color:rgba(124,58,237,.5)}
 
-.bos{text-align:center;padding:44px 16px;color:#475569;font-size:13px}
-.bos .bos-icon{font-size:32px;margin-bottom:10px}
+/* TOPLU TESLİMAT */
+.cat-tabs{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap}
+.cat-tab{padding:6px 14px;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;border:1px solid var(--border);background:transparent;color:var(--s);font-family:'DM Sans',sans-serif}
+.cat-tab.active{background:var(--p);color:#fff;border-color:var(--p)}
 
-.uyari-box{background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.25);border-radius:12px;overflow:hidden;margin-bottom:24px}
-.uyari-satir{padding:11px 16px;display:flex;justify-content:space-between;align-items:center;font-size:13px;gap:8px;flex-wrap:wrap}
+/* STAND YENİLE - ÜRÜN SATIRI */
+.sy-satir{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.05)}
+.sy-satir:last-child{border-bottom:none}
+.sy-satir .sy-isim{flex:1;min-width:0}
+.sy-satir .sy-isim strong{display:block;font-size:13px;color:#e2e8f0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sy-satir .sy-isim span{font-size:10px;color:var(--s)}
+.sy-satir input[type=number]{width:64px;text-align:center;padding:7px 6px!important}
+.sy-satir .sy-birak{display:flex;align-items:center;gap:4px;font-size:11px;color:var(--s);white-space:nowrap}
+.sy-satir .sy-birak input[type=checkbox]{width:16px;height:16px;accent-color:var(--p);font-size:14px!important}
+
+/* TOPLU TESLİMAT SATIRLARI */
+.tt-satir{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.05)}
+.tt-satir:last-child{border-bottom:none}
+.tt-satir .tt-isim{flex:1;font-size:13px;color:#e2e8f0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tt-satir .tt-stok{font-size:10px;color:var(--s)}
+.tt-satir input[type=number]{width:64px;text-align:center;padding:7px 6px!important}
+
+/* INFO BOXES */
+.info-box{background:rgba(14,165,233,.08);border:1px solid rgba(14,165,233,.2);border-radius:8px;padding:10px 12px;margin-bottom:12px;font-size:12px;color:#7dd3fc}
+.uyari-info{background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.2);border-radius:8px;padding:10px 12px;margin-bottom:12px;font-size:12px;color:#fcd34d}
+.basari-info{background:rgba(16,185,129,.08);border:1px solid rgba(16,185,129,.2);border-radius:8px;padding:10px 12px;margin-bottom:12px;font-size:12px;color:#6ee7b7}
+
+.uyari-box{background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.25);border-radius:10px;overflow:hidden;margin-bottom:20px}
+.uyari-satir{padding:10px 14px;display:flex;justify-content:space-between;align-items:center;font-size:12px;gap:8px;flex-wrap:wrap}
 .uyari-satir+.uyari-satir{border-top:1px solid rgba(245,158,11,.15)}
 
-.detay-header{display:flex;align-items:center;gap:10px;margin-bottom:18px;flex-wrap:wrap}
+.bos{text-align:center;padding:40px 16px;color:#475569;font-size:13px}
+.bos .bos-icon{font-size:28px;margin-bottom:8px}
 
-.log-item{background:var(--card);border-radius:10px;padding:12px 14px;display:flex;align-items:center;gap:12px;margin-bottom:8px;flex-wrap:wrap}
+/* ÜRÜN KAT SEKMELERİ */
+.urun-cat-bar{display:flex;gap:6px;margin-bottom:14px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none}
+.urun-cat-bar::-webkit-scrollbar{display:none}
+.urun-cat-btn{padding:6px 14px;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;border:1px solid var(--border);background:transparent;color:var(--s);font-family:'DM Sans',sans-serif;white-space:nowrap;flex-shrink:0}
+.urun-cat-btn.active{background:var(--p);color:#fff;border-color:var(--p)}
 
-.sayim-kalan-row{display:flex;align-items:center;gap:12px;margin-bottom:10px}
-.sayim-kalan-row .skr-label{flex:1;color:#94a3b8;font-size:13px}
-.sayim-kalan-row input{width:80px;text-align:center}
-
-.info-box{background:rgba(14,165,233,.08);border:1px solid rgba(14,165,233,.2);border-radius:8px;padding:10px 14px;margin-bottom:14px;font-size:12px;color:#7dd3fc}
-.uyari-info{background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.2);border-radius:8px;padding:10px 14px;margin-bottom:14px;font-size:12px;color:#fcd34d}
+/* ÜRETIM GEÇMIŞ */
+.uretim-liste{margin-top:10px;display:flex;flex-direction:column;gap:4px}
+.uretim-item{background:rgba(16,185,129,.06);border:1px solid rgba(16,185,129,.15);border-radius:6px;padding:6px 10px;display:flex;justify-content:space-between;align-items:center;font-size:12px}
 </style>
 </head>
 <body>
 <div id="header">
   <div id="logo">Poly<span>Play</span></div>
-  <nav id="nav">
-    <button class="active" onclick="sekmeGec('genel')">📊 Genel</button>
-    <button onclick="sekmeGec('noktalar')">📍 Noktalar</button>
-    <button onclick="sekmeGec('stok')">📦 Stok & Ürünler</button>
-    <button onclick="sekmeGec('performans')">📈 Performans</button>
-    <button onclick="sekmeGec('gecmis')">🕐 Geçmiş</button>
+  <nav>
+    <button class="active" onclick="sekme('genel')">📊 Genel</button>
+    <button onclick="sekme('noktalar')">📍 Noktalar</button>
+    <button onclick="sekme('stok')">📦 Stok & Ürünler</button>
+    <button onclick="sekme('performans')">📈 Performans</button>
+    <button onclick="sekme('gecmis')">🕐 Geçmiş</button>
   </nav>
 </div>
 <div id="content"></div>
-<div id="modal-container"></div>
+<div id="mc"></div>
+
 <script>
-const STORAGE_KEY='polyplay_v4'
-let state={noktalar:[],skular:[],uretimler:[],teslimalar:[],sayimlar:[],hareketler:[]}
-let aktifSekme='genel'
-let aktifNoktaId=null
-let perfSiralama='satilan-azalan'
+const SK = 'polyplay_v5'
+let S = {noktalar:[],skular:[],uretimler:[],teslimalar:[],sayimlar:[],hareketler:[]}
+let aktifSekme = 'genel'
+let aktifNokta = null
+let stokCat = 'tumu'
+let perfSira = 'satilan'
 
-async function loadState(){
-  try{
-    const r=await window.storage.get(STORAGE_KEY)
-    if(r?.value)state=JSON.parse(r.value)
-    if(state.teslimalar){state.teslimalar.forEach(t=>{if(t.birimFiyat===undefined){const sku=state.skular.find(s=>s.id===t.skuId);t.birimFiyat=sku?.fiyat||75}})}
-  }catch(e){}
+const uid = () => Date.now().toString(36) + Math.random().toString(36).substr(2,4)
+const bugun = () => new Date().toISOString().split('T')[0]
+const tl = n => `${Math.round(+n||0).toLocaleString('tr-TR')} ₺`
+const tarih = t => t ? new Date(t+'T12:00:00').toLocaleDateString('tr-TR') : '—'
+const KATS = ['çakmak','anahtarlık','yumurta']
+const IADE = 'iade', GERI = 'geriAlim'
+
+async function load() {
+  try {
+    const r = await window.storage.get(SK)
+    if (r?.value) S = JSON.parse(r.value)
+    // Migration: birimFiyat ekle
+    S.teslimalar.forEach(t => { if (!t.birimFiyat) { const s = S.skular.find(x=>x.id===t.skuId); t.birimFiyat = s?.fiyat||75 } })
+  } catch(e) {}
 }
-async function saveState(){try{await window.storage.set(STORAGE_KEY,JSON.stringify(state))}catch(e){}}
-const uid=()=>Date.now().toString(36)+Math.random().toString(36).substr(2,5)
-const bugun=()=>new Date().toISOString().split('T')[0]
-const tl=n=>`${Math.round(+n||0).toLocaleString('tr-TR')} ₺`
-const tarih=t=>t?new Date(t+'T12:00:00').toLocaleDateString('tr-TR'):'-'
-const KATEGORILER=['çakmak','anahtarlık','yumurta']
-const IADE='iade',GERI='geriAlim'
+async function kaydet() { try { await window.storage.set(SK, JSON.stringify(S)) } catch(e) {} }
 
-function depodakiStok(skuId){
-  const ur=state.uretimler.filter(u=>u.skuId===skuId).reduce((s,u)=>s+u.adet,0)
-  const br=state.teslimalar.filter(t=>t.skuId===skuId).reduce((s,t)=>s+t.adet,0)
-  const gd=state.hareketler.filter(h=>h.skuId===skuId).reduce((s,h)=>s+h.adet,0)
-  return Math.max(0,ur-br+gd)
+// ===== HESAPLAMA =====
+function depodakiStok(skuId) {
+  const ur = S.uretimler.filter(u=>u.skuId===skuId).reduce((s,u)=>s+u.adet,0)
+  const br = S.teslimalar.filter(t=>t.skuId===skuId).reduce((s,t)=>s+t.adet,0)
+  const gd = S.hareketler.filter(h=>h.skuId===skuId).reduce((s,h)=>s+h.adet,0)
+  return Math.max(0, ur-br+gd)
 }
 
-function noktaSkuDurum(noktaId,skuId){
-  const tsl=state.teslimalar.filter(t=>t.noktaId===noktaId&&t.skuId===skuId)
-  const har=state.hareketler.filter(h=>h.noktaId===noktaId&&h.skuId===skuId)
-  const syl=[...state.sayimlar.filter(s=>s.noktaId===noktaId&&s.kalanlar.some(k=>k.skuId===skuId))].sort((a,b)=>new Date(b.tarih)-new Date(a.tarih))
-  const toplamBirakilan=tsl.reduce((s,t)=>s+t.adet,0)
-  const toplamIade=har.filter(h=>h.tip===IADE).reduce((s,h)=>s+h.adet,0)
-  const toplamGeri=har.filter(h=>h.tip===GERI).reduce((s,h)=>s+h.adet,0)
-  const toplamGD=toplamIade+toplamGeri
-  const netGiden=toplamBirakilan-toplamGD
-  const fiyatToplam=tsl.reduce((s,t)=>s+(t.adet*(t.birimFiyat||state.skular.find(x=>x.id===skuId)?.fiyat||75)),0)
-  const ortFiyat=toplamBirakilan>0?fiyatToplam/toplamBirakilan:(state.skular.find(s=>s.id===skuId)?.fiyat||75)
-  const sonSayim=syl[0]||null
-  let rafta,satilan,sayimYok
-  if(sonSayim){
-    sayimYok=false
-    const sonKalan=sonSayim.kalanlar.find(k=>k.skuId===skuId)?.kalan??0
-    const birakSonra=tsl.filter(t=>t.tarih>sonSayim.tarih).reduce((s,t)=>s+t.adet,0)
-    const gdSonra=har.filter(h=>h.tarih>sonSayim.tarih).reduce((s,h)=>s+h.adet,0)
-    rafta=Math.max(0,sonKalan+birakSonra-gdSonra)
-    satilan=Math.max(0,netGiden-rafta)
-  }else{
-    sayimYok=true
-    rafta=Math.max(0,netGiden)
-    satilan=0
+function nsd(noktaId, skuId) {
+  const tsl = S.teslimalar.filter(t=>t.noktaId===noktaId&&t.skuId===skuId)
+  const har = S.hareketler.filter(h=>h.noktaId===noktaId&&h.skuId===skuId)
+  const syl = [...S.sayimlar.filter(s=>s.noktaId===noktaId&&s.kalanlar.some(k=>k.skuId===skuId))].sort((a,b)=>new Date(b.tarih)-new Date(a.tarih))
+  
+  const topBir = tsl.reduce((s,t)=>s+t.adet,0)
+  const topIade = har.filter(h=>h.tip===IADE).reduce((s,h)=>s+h.adet,0)
+  const topGeri = har.filter(h=>h.tip===GERI).reduce((s,h)=>s+h.adet,0)
+  const topGD = topIade + topGeri
+  const net = topBir - topGD
+  
+  const fToplam = tsl.reduce((s,t)=>s+(t.adet*(t.birimFiyat||S.skular.find(x=>x.id===skuId)?.fiyat||75)),0)
+  const ort = topBir > 0 ? fToplam/topBir : (S.skular.find(x=>x.id===skuId)?.fiyat||75)
+  
+  const son = syl[0]||null
+  let rafta, satilan, sayimYok
+  if (son) {
+    sayimYok = false
+    const sonK = son.kalanlar.find(k=>k.skuId===skuId)?.kalan??0
+    // Teslimat: sayımdan SONRA (strict >)
+    const bS = tsl.filter(t=>t.tarih>son.tarih).reduce((s,t)=>s+t.adet,0)
+    // Hareket: sayımla AYNI GÜN VEYA SONRA (>=) — iade aynı gün yapılsa da sayım sonrasıdır
+    const gS = har.filter(h=>h.tarih>=son.tarih).reduce((s,h)=>s+h.adet,0)
+    rafta = Math.max(0, sonK+bS-gS)
+    satilan = Math.max(0, net-rafta)
+  } else {
+    sayimYok = true
+    rafta = Math.max(0, net)
+    satilan = 0
   }
-  let rotasyon=false
-  if(syl.length>=2){
-    const son=syl[0].kalanlar.find(k=>k.skuId===skuId)?.kalan??0
-    const onceki=syl[1].kalanlar.find(k=>k.skuId===skuId)?.kalan??0
-    const aEk=tsl.filter(t=>t.tarih>syl[1].tarih&&t.tarih<=syl[0].tarih).reduce((s,t)=>s+t.adet,0)
-    const aGD=har.filter(h=>h.tarih>syl[1].tarih&&h.tarih<=syl[0].tarih).reduce((s,h)=>s+h.adet,0)
-    rotasyon=(onceki+aEk-aGD-son)<=0
+  
+  let rotasyon = false
+  if (syl.length >= 2) {
+    const s0 = syl[0].kalanlar.find(k=>k.skuId===skuId)?.kalan??0
+    const s1 = syl[1].kalanlar.find(k=>k.skuId===skuId)?.kalan??0
+    const aE = tsl.filter(t=>t.tarih>syl[1].tarih&&t.tarih<=syl[0].tarih).reduce((s,t)=>s+t.adet,0)
+    const aG = har.filter(h=>h.tarih>=syl[1].tarih&&h.tarih<syl[0].tarih).reduce((s,h)=>s+h.adet,0)
+    rotasyon = (s1+aE-aG-s0) <= 0
   }
-  return{toplamBirakilan,toplamIade,toplamGeri,toplamGD,rafta,satilan,gelir:satilan*ortFiyat,ortFiyat,sonSayimTarih:sonSayim?.tarih||null,rotasyon,sayimYok,sayimSayisi:syl.length}
+  
+  return {topBir, topIade, topGeri, topGD, rafta, satilan, gelir:satilan*ort, ort, sonT:son?.tarih||null, rotasyon, sayimYok}
 }
 
-function noktaToplam(noktaId){
-  const skuIdler=[...new Set(state.teslimalar.filter(t=>t.noktaId===noktaId).map(t=>t.skuId))]
-  return skuIdler.reduce((acc,sid)=>{
-    const d=noktaSkuDurum(noktaId,sid)
-    return{rafta:acc.rafta+d.rafta,satilan:acc.satilan+d.satilan,gelir:acc.gelir+d.gelir,iade:acc.iade+d.toplamIade,geri:acc.geri+d.toplamGeri,sayimYok:acc.sayimYok+(d.sayimYok&&d.rafta>0?1:0)}
-  },{rafta:0,satilan:0,gelir:0,iade:0,geri:0,sayimYok:0})
+function noktaToplam(noktaId) {
+  const ids = [...new Set(S.teslimalar.filter(t=>t.noktaId===noktaId).map(t=>t.skuId))]
+  return ids.reduce((a,sid) => {
+    const d = nsd(noktaId,sid)
+    return {rafta:a.rafta+d.rafta, satilan:a.satilan+d.satilan, gelir:a.gelir+d.gelir, iade:a.iade+d.topIade, sayimYok:a.sayimYok+(d.sayimYok&&d.rafta>0?1:0)}
+  }, {rafta:0, satilan:0, gelir:0, iade:0, sayimYok:0})
 }
 
-function genelToplam(){
-  const base={rafta:0,satilan:0,gelir:0,iade:0,geri:0,depo:0,aktifNokta:0,sayimBekleyen:0}
-  state.noktalar.forEach(n=>{
-    const d=noktaToplam(n.id)
-    base.rafta+=d.rafta;base.satilan+=d.satilan;base.gelir+=d.gelir;base.iade+=d.iade;base.geri+=d.geri
-    base.sayimBekleyen+=d.sayimYok
-    if(n.durum==='aktif')base.aktifNokta++
+function genelToplam() {
+  const g = {rafta:0, satilan:0, gelir:0, iade:0, depo:0, aktif:0, sayimBek:0}
+  S.noktalar.forEach(n => {
+    const d = noktaToplam(n.id)
+    g.rafta+=d.rafta; g.satilan+=d.satilan; g.gelir+=d.gelir; g.iade+=d.iade; g.sayimBek+=d.sayimYok
+    if(n.durum==='aktif') g.aktif++
   })
-  base.depo=state.skular.reduce((s,sku)=>s+depodakiStok(sku.id),0)
-  return base
+  g.depo = S.skular.reduce((s,sku)=>s+depodakiStok(sku.id),0)
+  return g
 }
 
-function skuBagliKayitSayisi(skuId){
-  return state.uretimler.filter(u=>u.skuId===skuId).length+state.teslimalar.filter(t=>t.skuId===skuId).length+state.hareketler.filter(h=>h.skuId===skuId).length+state.sayimlar.filter(s=>s.kalanlar.some(k=>k.skuId===skuId)).length
-}
+// ===== RENDER HELPERS =====
+function badge(renk, t) { return `<span class="badge" style="background:rgba(${renk},.15);color:rgb(${renk})">${t}</span>` }
+function kart(b, d, renk, alt='') { return `<div class="kart" style="border:1px solid rgba(${renk},.25)"><div class="kb">${b}</div><div class="kd" style="color:rgb(${renk})">${d}</div>${alt?`<div class="ka">${alt}</div>`:''}</div>` }
+const durumBadge = (d, rafta) => d.sayimYok&&rafta>0 ? badge('245,158,11','⏳ Sayım') : d.rotasyon&&rafta>0 ? badge('245,158,11','⚠️ Rotasyon') : rafta===0 ? badge('100,116,139','Tükendi') : badge('16,185,129','Aktif')
 
-function badge(renk,text){return`<span class="badge" style="background:rgba(${renk},.15);color:rgb(${renk})">${text}</span>`}
-function kart(baslik,deger,renk,alt=''){return`<div class="kart" style="border:1px solid rgba(${renk},.25)"><div class="kbaslik">${baslik}</div><div class="kdeger" style="color:rgb(${renk})">${deger}</div>${alt?`<div class="kalt">${alt}</div>`:''}</div>`}
+// ===== MODAL =====
+function mc(html) { document.getElementById('mc').innerHTML=`<div class="overlay" onclick="if(event.target===this)kmc()">${html}</div>` }
+function kmc() { document.getElementById('mc').innerHTML='' }
 
-function closeModal(){document.getElementById('modal-container').innerHTML=''}
-function showModal(html){document.getElementById('modal-container').innerHTML=`<div class="overlay" onclick="if(event.target===this)closeModal()">${html}</div>`}
-
-function modalNokta(duzenle=null){
-  const d=duzenle||{ad:'',konum:'',durum:'aktif'}
-  showModal(`<div class="modal"><h3>${duzenle?'Nokta Düzenle':'Nokta Ekle'} <button onclick="closeModal()">×</button></h3>
-    <div class="fg"><label>Nokta Adı *</label><input id="n-ad" value="${d.ad}" placeholder="Erkut Abi Büfesi"></div>
-    <div class="fg"><label>Konum</label><input id="n-kon" value="${d.konum}" placeholder="Çarşı, Merkez..."></div>
-    <div class="fg"><label>Durum</label><select id="n-dur"><option value="aktif"${d.durum==='aktif'?' selected':''}>Aktif</option><option value="pasif"${d.durum==='pasif'?' selected':''}>Pasif</option></select></div>
-    <div class="btn-row" style="justify-content:flex-end;margin-top:6px"><button class="btn btn-gh" onclick="closeModal()">İptal</button><button class="btn btn-p" onclick="kaydetNokta('${duzenle?.id||''}')">Kaydet</button></div>
-  </div>`)
-}
-function kaydetNokta(id){
-  const ad=document.getElementById('n-ad').value.trim()
-  if(!ad){alert('Nokta adı zorunlu');return}
-  const obj={ad,konum:document.getElementById('n-kon').value.trim(),durum:document.getElementById('n-dur').value}
-  if(id)state.noktalar=state.noktalar.map(n=>n.id===id?{...n,...obj}:n)
-  else state.noktalar.push({id:uid(),...obj})
-  saveState();closeModal();render()
-}
-function silNokta(id){
-  const n=state.noktalar.find(x=>x.id===id)
-  const tslSay=state.teslimalar.filter(x=>x.noktaId===id).length
-  const sySay=state.sayimlar.filter(x=>x.noktaId===id).length
-  const harSay=state.hareketler.filter(x=>x.noktaId===id).length
-  if(!confirm(`"${n.ad}" silinecek.\n\nBağlı kayıtlar:\n• ${tslSay} teslimat\n• ${sySay} sayım\n• ${harSay} iade/geri alım\n\nDevam edilsin mi?`))return
-  state.noktalar=state.noktalar.filter(x=>x.id!==id)
-  state.teslimalar=state.teslimalar.filter(x=>x.noktaId!==id)
-  state.sayimlar=state.sayimlar.filter(x=>x.noktaId!==id)
-  state.hareketler=state.hareketler.filter(x=>x.noktaId!==id)
-  if(aktifNoktaId===id)aktifNoktaId=null
-  saveState();render()
-}
-
-function modalSku(duzenle=null){
-  const d=duzenle||{model:'',kategori:'çakmak',fiyat:75,maliyet:''}
-  const uyari=duzenle&&state.teslimalar.some(t=>t.skuId===duzenle.id)?'<div class="uyari-info">💡 Fiyat değişikliği sadece YENİ teslimatları etkiler. Geçmiş satışlar teslimat anındaki fiyatla hesaplanır.</div>':''
-  showModal(`<div class="modal"><h3>${duzenle?'Ürün Düzenle':'Yeni Ürün'} <button onclick="closeModal()">×</button></h3>
-    ${uyari}
-    <div class="fg"><label>Model Adı *</label><input id="s-model" value="${d.model}" placeholder="Batman, Jerry, Joker..."></div>
-    <div class="fg"><label>Kategori</label><select id="s-kat">${KATEGORILER.map(k=>`<option value="${k}"${d.kategori===k?' selected':''}>${k.charAt(0).toUpperCase()+k.slice(1)}</option>`).join('')}</select></div>
-    <div class="fg"><label>Güncel Satış Fiyatı (TL)</label><input id="s-fiyat" type="number" value="${d.fiyat}" min="0"></div>
-    <div class="fg"><label>Birim Maliyet (TL)</label><input id="s-maliyet" type="number" value="${d.maliyet||''}" placeholder="Opsiyonel"></div>
-    <div class="btn-row" style="justify-content:flex-end;margin-top:6px"><button class="btn btn-gh" onclick="closeModal()">Ä°ptal</button><button class="btn btn-p" onclick="kaydetSku('${duzenle?.id||''}')">Kaydet</button></div>
-  </div>`)
-}
-function kaydetSku(id){
-  const model=document.getElementById('s-model').value.trim()
-  if(!model){alert('Model adı zorunlu');return}
-  const obj={model,kategori:document.getElementById('s-kat').value,fiyat:parseFloat(document.getElementById('s-fiyat').value)||75,maliyet:parseFloat(document.getElementById('s-maliyet').value)||0}
-  if(id)state.skular=state.skular.map(s=>s.id===id?{...s,...obj}:s)
-  else state.skular.push({id:uid(),...obj})
-  saveState();closeModal();render()
-}
-function silSku(id){
-  const s=state.skular.find(x=>x.id===id)
-  const bag=skuBagliKayitSayisi(id)
-  const msg=bag>0?`"${s.model}" silinecek.\n\n⚠️ Bu ürüne ait ${bag} kayıt var.\nGeçmiş kayıtlar "Silinmiş ürün" olarak görünecek.\n\nDevam?`:`"${s.model}" silinecek. Devam?`
-  if(!confirm(msg))return
-  state.skular=state.skular.filter(x=>x.id!==id);saveState();render()
-}
-
-function modalUretim(){
-  if(!state.skular.length){alert('Önce ürün ekleyin');return}
-  showModal(`<div class="modal"><h3>Üretim Kaydı <button onclick="closeModal()">×</button></h3>
-    <div class="info-box">🏭 Üretilen ürünler depoya girer.</div>
-    <div class="fg"><label>Ürün *</label><select id="ur-sku">${state.skular.map(s=>`<option value="${s.id}">${s.model} (${s.kategori})</option>`).join('')}</select></div>
-    <div class="fg"><label>Üretilen Adet *</label><input id="ur-adet" type="number" min="1" placeholder="13"></div>
-    <div class="fg"><label>Tarih</label><input id="ur-tarih" type="date" value="${bugun()}"></div>
-    <div class="fg"><label>Not</label><textarea id="ur-not" placeholder="Plaka notu..."></textarea></div>
-    <div class="btn-row" style="justify-content:flex-end;margin-top:6px"><button class="btn btn-gh" onclick="closeModal()">İptal</button><button class="btn btn-g" onclick="kaydetUretim()">Kaydet</button></div>
-  </div>`)
-}
-function kaydetUretim(){
-  const adet=parseInt(document.getElementById('ur-adet').value)
-  if(!adet||adet<=0){alert('Geçerli adet girin');return}
-  state.uretimler.push({id:uid(),skuId:document.getElementById('ur-sku').value,adet,tarih:document.getElementById('ur-tarih').value,not:document.getElementById('ur-not').value})
-  saveState();closeModal();render()
-}
-function silUretim(id){
-  if(!confirm('Bu üretim kaydını silmek istiyor musunuz?'))return
-  state.uretimler=state.uretimler.filter(x=>x.id!==id);saveState();render()
-}
-
-function modalTeslimat(noktaId){
-  if(!state.skular.length){alert('Önce ürün ekleyin');return}
-  const skuOpts=state.skular.map(s=>`<option value="${s.id}" data-fiyat="${s.fiyat}">${s.model} (${s.kategori}) — Depoda: ${depodakiStok(s.id)}</option>`).join('')
-  showModal(`<div class="modal"><h3>Teslimat Ekle <button onclick="closeModal()">×</button></h3>
-    <div class="info-box">📦 Ürünler depodan düşülür, noktanın rafına eklenir. Fiyat kilitlenir.</div>
-    <div class="fg"><label>Ürün *</label><select id="tsl-sku" onchange="tslGuncelle()">${skuOpts}</select></div>
-    <div id="tsl-stok-info" style="font-size:12px;color:var(--s);margin-bottom:12px"></div>
-    <div class="fg"><label>Adet *</label><input id="tsl-adet" type="number" min="1"></div>
-    <div class="fg"><label>Birim Fiyat (TL) — değiştirebilirsin</label><input id="tsl-fiyat" type="number" min="0"></div>
-    <div class="fg"><label>Tarih</label><input id="tsl-tarih" type="date" value="${bugun()}"></div>
-    <div class="fg"><label>Not</label><textarea id="tsl-not" placeholder="Opsiyonel..."></textarea></div>
-    <div class="btn-row" style="justify-content:flex-end;margin-top:6px"><button class="btn btn-gh" onclick="closeModal()">İptal</button><button class="btn btn-g" onclick="kaydetTeslimat('${noktaId}')">Kaydet</button></div>
-  </div>`)
-  setTimeout(tslGuncelle,50)
-}
-function tslGuncelle(){
-  const sel=document.getElementById('tsl-sku')
-  const fiyatEl=document.getElementById('tsl-fiyat')
-  const infoEl=document.getElementById('tsl-stok-info')
-  if(!sel)return
-  const sku=state.skular.find(s=>s.id===sel.value)
-  if(sku&&fiyatEl&&!fiyatEl.value)fiyatEl.value=sku.fiyat
-  const stk=depodakiStok(sel.value)
-  infoEl.innerHTML=stk>0?`✅ Depoda <strong style="color:var(--g)">${stk}</strong> adet mevcut`:`❌ <strong style="color:var(--r)">Depoda stok yok!</strong>`
-}
-function kaydetTeslimat(noktaId){
-  const skuId=document.getElementById('tsl-sku').value
-  const adet=parseInt(document.getElementById('tsl-adet').value)
-  const birimFiyat=parseFloat(document.getElementById('tsl-fiyat').value)
-  if(!adet||adet<=0){alert('Geçerli adet girin');return}
-  if(!birimFiyat||birimFiyat<0){alert('Geçerli fiyat girin');return}
-  const stk=depodakiStok(skuId)
-  if(adet>stk){alert(`Yetersiz stok! Depoda ${stk} adet var.`);return}
-  state.teslimalar.push({id:uid(),noktaId,skuId,adet,birimFiyat,tarih:document.getElementById('tsl-tarih').value,not:document.getElementById('tsl-not').value})
-  saveState();closeModal();render()
-}
-function silTeslimat(id){
-  if(!confirm('Bu teslimatı silmek istiyor musunuz?'))return
-  state.teslimalar=state.teslimalar.filter(x=>x.id!==id);saveState();render()
-}
-
-function modalSayim(noktaId){
-  const skuIdler=[...new Set(state.teslimalar.filter(t=>t.noktaId===noktaId).map(t=>t.skuId))]
-  if(!skuIdler.length){alert('Bu noktaya henüz teslimat yapılmadı');return}
-  const satirlar=skuIdler.map(sid=>{
-    const sku=state.skular.find(s=>s.id===sid)
-    const d=noktaSkuDurum(noktaId,sid)
-    return`<div class="sayim-kalan-row"><div class="skr-label"><strong>${sku?.model||'?'}</strong> <span style="color:var(--s)">(${sku?.kategori}) — Sistemde: ${d.rafta}</span></div><input type="number" min="0" id="sy-${sid}" value="${d.rafta}" style="width:72px;text-align:center"></div>`
-  }).join('')
-  showModal(`<div class="modal"><h3>Sayım Yap <button onclick="closeModal()">×</button></h3>
-    <div class="info-box">📊 Rafta gerçek kalan adeti girin. Satış otomatik hesaplanır:<br><strong>Satılan = Bırakılan − İade/Geri − Rafta</strong></div>
-    <div class="fg"><label>Sayım Tarihi</label><input id="sy-tarih" type="date" value="${bugun()}"></div>
-    <div style="margin-bottom:14px"><div style="font-size:10px;color:var(--s);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px">Gerçek Rafta Kalan Adetler</div>${satirlar}</div>
-    <div class="fg"><label>Not</label><textarea id="sy-not" placeholder="Sayım notu..."></textarea></div>
-    <div class="btn-row" style="justify-content:flex-end;margin-top:6px"><button class="btn btn-gh" onclick="closeModal()">İptal</button><button class="btn btn-p" onclick="kaydetSayim('${noktaId}','${skuIdler.join(',')}')">Kaydet</button></div>
-  </div>`)
-}
-function kaydetSayim(noktaId,skuIdsStr){
-  const skuIdler=skuIdsStr.split(',')
-  const kalanlar=skuIdler.map(sid=>({skuId:sid,kalan:parseInt(document.getElementById('sy-'+sid)?.value)||0}))
-  state.sayimlar.push({id:uid(),noktaId,tarih:document.getElementById('sy-tarih').value,not:document.getElementById('sy-not').value,kalanlar})
-  saveState();closeModal();render()
-}
-function silSayim(id){
-  if(!confirm('Bu sayımı silmek istiyor musunuz? Satış hesaplarını etkiler.'))return
-  state.sayimlar=state.sayimlar.filter(x=>x.id!==id);saveState();render()
-}
-
-function modalHareket(noktaId,tip){
-  const raftaOlanlar=state.skular.filter(s=>noktaSkuDurum(noktaId,s.id).rafta>0)
-  if(!raftaOlanlar.length){alert('Bu noktada rafta ürün bulunmuyor');return}
-  const isIade=tip===IADE
-  showModal(`<div class="modal"><h3>${isIade?'İade Ekle':'Geri Alım Ekle'} <button onclick="closeModal()">×</button></h3>
-    <div class="info-box">${isIade?'↩️ Nokta satılmayan ürünleri geri verdi':'🔄 Ürünleri başka noktaya taşımak için geri alıyorsun'} — Stoka döner.</div>
-    <div class="fg"><label>Ürün *</label><select id="hr-sku">${raftaOlanlar.map(s=>{const d=noktaSkuDurum(noktaId,s.id);return`<option value="${s.id}">${s.model} (${s.kategori}) — Rafta: ${d.rafta}</option>`}).join('')}</select></div>
-    <div class="fg"><label>Adet *</label><input id="hr-adet" type="number" min="1"></div>
-    <div class="fg"><label>Tarih</label><input id="hr-tarih" type="date" value="${bugun()}"></div>
-    <div class="fg"><label>Not</label><textarea id="hr-not" placeholder="Opsiyonel..."></textarea></div>
-    <div class="btn-row" style="justify-content:flex-end;margin-top:6px"><button class="btn btn-gh" onclick="closeModal()">İptal</button><button class="btn ${isIade?'btn-y':'btn-r'}" onclick="kaydetHareket('${noktaId}','${tip}')">Kaydet</button></div>
-  </div>`)
-}
-function kaydetHareket(noktaId,tip){
-  const skuId=document.getElementById('hr-sku').value
-  const adet=parseInt(document.getElementById('hr-adet').value)
-  if(!adet||adet<=0){alert('Geçerli adet girin');return}
-  const d=noktaSkuDurum(noktaId,skuId)
-  if(adet>d.rafta){alert(`Rafta sadece ${d.rafta} adet var`);return}
-  state.hareketler.push({id:uid(),noktaId,skuId,adet,tip,tarih:document.getElementById('hr-tarih').value,not:document.getElementById('hr-not').value})
-  saveState();closeModal();render()
-}
-function silHareket(id){
-  if(!confirm('Bu hareketi silmek istiyor musunuz?'))return
-  state.hareketler=state.hareketler.filter(x=>x.id!==id);saveState();render()
-}
-
-function sekmeGec(s){
+// ===== SEKMELER =====
+function sekme(s) {
   aktifSekme=s
-  if(s!=='noktalar')aktifNoktaId=null
-  document.querySelectorAll('nav button').forEach((b,i)=>{
-    const tabs=['genel','noktalar','stok','performans','gecmis']
-    b.classList.toggle('active',tabs[i]===s)
-  })
+  if(s!=='noktalar') aktifNokta=null
+  document.querySelectorAll('nav button').forEach((b,i)=>b.classList.toggle('active',['genel','noktalar','stok','performans','gecmis'][i]===s))
   render()
 }
 
-function renderGenel(){
-  const gt=genelToplam()
-  const uyarilar=[]
-  state.noktalar.forEach(n=>{
-    const skuIdler=[...new Set(state.teslimalar.filter(t=>t.noktaId===n.id).map(t=>t.skuId))]
-    skuIdler.forEach(sid=>{const d=noktaSkuDurum(n.id,sid);if(d.rotasyon&&d.rafta>0){const sku=state.skular.find(s=>s.id===sid);uyarilar.push({nokta:n.ad,model:`${sku?.model||'?'} (${sku?.kategori})`,rafta:d.rafta})}})
+// ===== GENEL =====
+function renderGenel() {
+  const g = genelToplam()
+  const uyarilar = []
+  S.noktalar.forEach(n=>{
+    [...new Set(S.teslimalar.filter(t=>t.noktaId===n.id).map(t=>t.skuId))].forEach(sid=>{
+      const d=nsd(n.id,sid)
+      if(d.rotasyon&&d.rafta>0){const s=S.skular.find(x=>x.id===sid); uyarilar.push(`${n.ad} — ${s?.model||'?'}: ${d.rafta} adet bekliyor`)}
+    })
   })
-  let html=`<div class="kartlar">
-    ${kart('Aktif Nokta',gt.aktifNokta,'14,165,233',`${state.noktalar.length} toplam`)}
-    ${kart('Toplam Satılan',gt.satilan,'16,185,129','adet')}
-    ${kart('Toplam Gelir',tl(gt.gelir),'124,58,237')}
-    ${kart('Rafta Aktif',gt.rafta,'249,115,22','adet')}
-    ${kart('Depoda',gt.depo,'45,212,191','adet')}
-    ${kart('İade',gt.iade,'239,68,68','adet')}
-    ${kart('Geri Alım',gt.geri,'100,116,139','adet')}
+  let h = `<div class="kartlar">
+    ${kart('Aktif Nokta',g.aktif,'14,165,233',`${S.noktalar.length} toplam`)}
+    ${kart('Satılan',g.satilan,'16,185,129','adet')}
+    ${kart('Gelir',tl(g.gelir),'124,58,237')}
+    ${kart('Rafta',g.rafta,'249,115,22','adet')}
+    ${kart('Depoda',g.depo,'45,212,191','adet')}
+    ${kart('İade',g.iade,'239,68,68','adet')}
   </div>`
-  if(gt.sayimBekleyen>0){html+=`<div class="uyari-info" style="margin-bottom:24px">⏳ <strong>${gt.sayimBekleyen}</strong> ürün için sayım bekliyor. Sayım yapılmadan satış miktarı hesaplanamaz.</div>`}
-  if(uyarilar.length){html+=`<div class="uyari-box"><div style="padding:10px 16px;font-size:10px;color:var(--y);text-transform:uppercase;letter-spacing:.5px;font-weight:600">⚠️ Rotasyon Uyarısı (${uyarilar.length})</div>${uyarilar.map(u=>`<div class="uyari-satir"><span style="color:#fcd34d">${u.nokta} — ${u.model}</span><span style="color:var(--s)">${u.rafta} adet bekliyor</span></div>`).join('')}</div>`}
-  html+=`<div class="sec"><div class="sec-baslik">Nokta Özetleri</div>`
-  if(!state.noktalar.length){html+=`<div class="bos"><div class="bos-icon">📍</div>Henüz nokta eklenmedi.</div>`}
-  else{
-    html+=`<div class="tbl-wrap"><table class="tbl"><thead><tr>${['Nokta','Durum','Rafta','Satılan','Gelir','İade','Geri Alım'].map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>`
-    state.noktalar.forEach(n=>{const d=noktaToplam(n.id);html+=`<tr><td><strong style="color:#e2e8f0">${n.ad}</strong>${n.konum?`<div style="font-size:11px;color:var(--s)">${n.konum}</div>`:''}</td><td>${badge(n.durum==='aktif'?'16,185,129':'100,116,139',n.durum)}</td><td><span style="color:var(--o);font-weight:600">${d.rafta}</span></td><td><span style="color:var(--g);font-weight:600">${d.satilan}</span>${d.sayimYok>0?`<span style="color:var(--y);font-size:10px;margin-left:6px">⏳${d.sayimYok}</span>`:''}</td><td><span style="color:var(--p);font-weight:600">${tl(d.gelir)}</span></td><td>${d.iade}</td><td>${d.geri}</td></tr>`})
-    html+=`</tbody></table></div>`
-  }
-  return html+`</div>`
+  if(g.sayimBek>0) h+=`<div class="uyari-info">⏳ ${g.sayimBek} ürün için sayım bekliyor — sayım yapılmadan satış hesaplanamaz.</div>`
+  if(uyarilar.length) h+=`<div class="uyari-box"><div style="padding:8px 14px;font-size:10px;color:var(--y);text-transform:uppercase;letter-spacing:.5px;font-weight:600">⚠️ Rotasyon Uyarısı</div>${uyarilar.map(u=>`<div class="uyari-satir"><span style="color:#fcd34d">${u}</span></div>`).join('')}</div>`
+  h+=`<div class="sec"><div class="sec-baslik">Nokta Özetleri</div><div class="kart-list">`
+  if(!S.noktalar.length) h+=`<div class="bos"><div class="bos-icon">📍</div>Henüz nokta eklenmedi.</div>`
+  else S.noktalar.forEach(n=>{
+    const d=noktaToplam(n.id)
+    h+=`<div class="liste-kart">
+      <div class="lk-baslik"><span>${n.ad}${n.konum?` <span style="font-size:11px;color:var(--s);font-weight:400">${n.konum}</span>`:''}</span>${badge(n.durum==='aktif'?'16,185,129':'100,116,139',n.durum)}</div>
+      <div class="lk-satirlar">
+        <div class="lk-stat">Rafta: <span style="color:var(--o)">${d.rafta}</span></div>
+        <div class="lk-stat">Satılan: <span style="color:var(--g)">${d.satilan}</span></div>
+        <div class="lk-stat">Gelir: <span style="color:var(--p)">${tl(d.gelir)}</span></div>
+        <div class="lk-stat">İade: <span>${d.iade}</span></div>
+        ${d.sayimYok>0?`<div class="lk-stat"><span style="color:var(--y)">⏳ ${d.sayimYok} sayım bek.</span></div>`:''}
+      </div>
+    </div>`
+  })
+  h+=`</div></div>`
+  return h
 }
 
-function renderNoktalar(){
-  if(aktifNoktaId)return renderNoktaDetay(aktifNoktaId)
-  let html=`<div class="sec"><div class="sec-baslik">Satış Noktaları <button class="btn btn-p btn-sm" onclick="modalNokta()">+ Nokta Ekle</button></div>`
-  if(!state.noktalar.length){html+=`<div class="bos"><div class="bos-icon">📍</div>Henüz satış noktası eklenmedi.</div>`}
-  else{
-    html+=`<div class="nokta-grid">`
-    state.noktalar.forEach(n=>{
+// ===== NOKTALAR =====
+function renderNoktalar() {
+  if(aktifNokta) return renderDetay(aktifNokta)
+  let h=`<div class="sec"><div class="sec-baslik">Satış Noktaları <button class="btn btn-p btn-sm" onclick="mNokta()">+ Nokta</button></div>`
+  if(!S.noktalar.length) h+=`<div class="bos"><div class="bos-icon">📍</div>Henüz nokta eklenmedi.</div>`
+  else {
+    h+=`<div class="nokta-grid">`
+    S.noktalar.forEach(n=>{
       const d=noktaToplam(n.id)
-      html+=`<div class="nokta-kart" onclick="noktaDetay('${n.id}')"><div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px;gap:8px"><div style="min-width:0"><div class="nk-baslik">${n.ad}</div><div class="nk-konum">${n.konum||'—'}</div></div>${badge(n.durum==='aktif'?'16,185,129':'100,116,139',n.durum)}</div><div class="nk-grid"><div class="nk-stat"><div class="nk-lbl">Rafta</div><div class="nk-val" style="color:var(--o)">${d.rafta}</div></div><div class="nk-stat"><div class="nk-lbl">Satılan</div><div class="nk-val" style="color:var(--g)">${d.satilan}</div></div><div class="nk-stat"><div class="nk-lbl">Gelir</div><div class="nk-val" style="color:var(--p);font-size:15px">${tl(d.gelir)}</div></div><div class="nk-stat"><div class="nk-lbl">İade/Geri</div><div class="nk-val" style="color:var(--r)">${d.iade+d.geri}</div></div></div>${d.sayimYok>0?`<div style="margin-top:12px;padding:6px 10px;background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.2);border-radius:6px;font-size:11px;color:#fcd34d">⏳ ${d.sayimYok} ürün için sayım bekliyor</div>`:''}</div>`
+      h+=`<div class="nokta-kart" onclick="aktifNokta='${n.id}';render()">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px">
+          <div><div class="nk-baslik">${n.ad}</div><div class="nk-konum">${n.konum||'—'}</div></div>
+          ${badge(n.durum==='aktif'?'16,185,129':'100,116,139',n.durum)}
+        </div>
+        <div class="nk-grid">
+          <div class="nk-stat"><div class="nk-lbl">Rafta</div><div class="nk-val" style="color:var(--o)">${d.rafta}</div></div>
+          <div class="nk-stat"><div class="nk-lbl">Satılan</div><div class="nk-val" style="color:var(--g)">${d.satilan}</div></div>
+          <div class="nk-stat"><div class="nk-lbl">Gelir</div><div class="nk-val" style="color:var(--p);font-size:15px">${tl(d.gelir)}</div></div>
+          <div class="nk-stat"><div class="nk-lbl">İade</div><div class="nk-val" style="color:var(--r)">${d.iade}</div></div>
+        </div>
+        ${d.sayimYok>0?`<div style="margin-top:10px;padding:5px 10px;background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.2);border-radius:6px;font-size:11px;color:#fcd34d">⏳ ${d.sayimYok} ürün için sayım bekliyor</div>`:''}
+      </div>`
     })
-    html+=`</div>`
+    h+=`</div>`
   }
-  return html+`</div>`
+  return h+`</div>`
 }
 
-function noktaDetay(id){aktifNoktaId=id;render()}
-
-function renderNoktaDetay(noktaId){
-  const n=state.noktalar.find(x=>x.id===noktaId)
-  if(!n){aktifNoktaId=null;return renderNoktalar()}
-  const d=noktaToplam(noktaId)
-  const skuIdler=[...new Set(state.teslimalar.filter(t=>t.noktaId===noktaId).map(t=>t.skuId))]
-  let html=`<div class="detay-header"><button class="btn btn-gh btn-sm" onclick="aktifNoktaId=null;render()">← Geri</button><span style="font-family:'Syne',sans-serif;font-weight:700;font-size:17px;color:#e2e8f0">${n.ad}</span>${badge(n.durum==='aktif'?'16,185,129':'100,116,139',n.durum)}</div><div class="btn-row" style="margin-bottom:18px"><button class="btn btn-g btn-sm" onclick="modalTeslimat('${noktaId}')">+ Teslimat</button><button class="btn btn-p btn-sm" onclick="modalSayim('${noktaId}')">📊 Sayım</button><button class="btn btn-y btn-sm" onclick="modalHareket('${noktaId}','${IADE}')">↩️ İade</button><button class="btn btn-r btn-sm" onclick="modalHareket('${noktaId}','${GERI}')">🔄 Geri Alım</button><button class="btn btn-gh btn-sm" onclick="modalNokta(state.noktalar.find(x=>x.id==='${noktaId}'))">Düzenle</button><button class="btn btn-r btn-sm" onclick="silNokta('${noktaId}')">Sil</button></div>`
-  html+=`<div class="kartlar">${kart('Rafta Aktif',d.rafta,'249,115,22','adet')}${kart('Satılan',d.satilan,'16,185,129','adet')}${kart('Gelir',tl(d.gelir),'124,58,237')}${kart('İade',d.iade,'239,68,68','adet')}${kart('Geri Alım',d.geri,'100,116,139','adet')}</div>`
-  html+=`<div class="sec"><div class="sec-baslik">Ürün Detayları</div>`
-  if(!skuIdler.length){html+=`<div class="bos">Bu noktaya henüz teslimat yapılmadı.</div>`}
-  else{
-    html+=`<div class="tbl-wrap"><table class="tbl"><thead><tr>${['Ürün','Kategori','Bırakılan','Rafta','Satılan','Gelir','İade','Geri Alım','Son Sayım','Durum'].map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>`
-    skuIdler.forEach(sid=>{
-      const sku=state.skular.find(s=>s.id===sid)
-      const sd=noktaSkuDurum(noktaId,sid)
-      let db
-      if(sd.sayimYok&&sd.rafta>0)db=badge('245,158,11','⏳ Sayım Bekliyor')
-      else if(sd.rotasyon&&sd.rafta>0)db=badge('245,158,11','⚠️ Rotasyon')
-      else if(sd.rafta===0)db=badge('100,116,139','Tükendi')
-      else db=badge('16,185,129','Aktif')
-      const satilanGoster=sd.sayimYok?`<span style="color:var(--s)">—</span>`:`<strong style="color:var(--g)">${sd.satilan}</strong>`
-      const gelirGoster=sd.sayimYok?`<span style="color:var(--s)">—</span>`:`<span style="color:var(--p)">${tl(sd.gelir)}</span>`
-      html+=`<tr><td><strong style="color:#e2e8f0">${sku?.model||'Silinmiş'}</strong></td><td>${badge('124,58,237',sku?.kategori||'?')}</td><td>${sd.toplamBirakilan}</td><td><strong style="color:var(--o)">${sd.rafta}</strong></td><td>${satilanGoster}</td><td>${gelirGoster}</td><td>${sd.toplamIade}</td><td>${sd.toplamGeri}</td><td style="font-size:12px">${sd.sonSayimTarih?tarih(sd.sonSayimTarih):`<span style="color:var(--y)">Sayım yok</span>`}</td><td>${db}</td></tr>`
+function renderDetay(noktaId) {
+  const n = S.noktalar.find(x=>x.id===noktaId)
+  if(!n){aktifNokta=null;return renderNoktalar()}
+  const d = noktaToplam(noktaId)
+  const skuIdler = [...new Set(S.teslimalar.filter(t=>t.noktaId===noktaId).map(t=>t.skuId))]
+  
+  let h=`<div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap">
+    <button class="btn btn-gh btn-sm" onclick="aktifNokta=null;render()">← Geri</button>
+    <span style="font-family:'Syne',sans-serif;font-weight:700;font-size:17px;color:#e2e8f0">${n.ad}</span>
+    ${badge(n.durum==='aktif'?'16,185,129':'100,116,139',n.durum)}
+  </div>
+  <div class="btn-row" style="margin-bottom:16px">
+    <button class="btn btn-g btn-sm" onclick="mTeslimat('${noktaId}')">+ Teslimat</button>
+    <button class="btn btn-p btn-sm" onclick="mStandYenile('${noktaId}')">🔄 Stand Yenile</button>
+    <button class="btn btn-y btn-sm" onclick="mIade('${noktaId}')">↩️ İade</button>
+    <button class="btn btn-gh btn-sm" onclick="mNokta(S.noktalar.find(x=>x.id==='${noktaId}'))">Düzenle</button>
+    <button class="btn btn-r btn-sm" onclick="mKapat('${noktaId}')">Noktayı Kapat</button>
+    <button class="btn btn-r btn-sm" onclick="silNokta('${noktaId}')">Sil</button>
+  </div>`
+  
+  h+=`<div class="kartlar">
+    ${kart('Rafta',d.rafta,'249,115,22','adet')}
+    ${kart('Satılan',d.satilan,'16,185,129','adet')}
+    ${kart('Gelir',tl(d.gelir),'124,58,237')}
+    ${kart('İade',d.iade,'239,68,68','adet')}
+  </div>`
+  
+  // Ürün listesi - kart bazlı
+  h+=`<div class="sec"><div class="sec-baslik">Ürün Detayları</div>`
+  if(!skuIdler.length) h+=`<div class="bos">Bu noktaya henüz teslimat yapılmadı.</div>`
+  else {
+    // Kategoriye göre grupla
+    const katlar = ['çakmak','anahtarlık','yumurta']
+    katlar.forEach(kat => {
+      const katSkular = skuIdler.filter(sid => S.skular.find(x=>x.id===sid)?.kategori===kat)
+      if(!katSkular.length) return
+      h+=`<div style="font-size:10px;color:var(--s);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;margin-top:10px">${kat}</div>`
+      h+=`<div class="kart-list" style="margin-bottom:8px">`
+      katSkular.forEach(sid => {
+        const sku=S.skular.find(x=>x.id===sid)
+        const sd=nsd(noktaId,sid)
+        h+=`<div class="liste-kart">
+          <div class="lk-baslik">
+            <strong>${sku?.model||'Silinmiş'}</strong>
+            ${durumBadge(sd,sd.rafta)}
+          </div>
+          <div class="lk-satirlar">
+            <div class="lk-stat">Bırakılan: <span>${sd.topBir}</span></div>
+            <div class="lk-stat">Rafta: <span style="color:var(--o)">${sd.rafta}</span></div>
+            <div class="lk-stat">Satılan: <span style="color:${sd.sayimYok?'var(--s)':'var(--g)'}">${sd.sayimYok?'—':sd.satilan}</span></div>
+            <div class="lk-stat">Gelir: <span style="color:${sd.sayimYok?'var(--s)':'var(--p)'}">${sd.sayimYok?'—':tl(sd.gelir)}</span></div>
+            <div class="lk-stat">İade: <span>${sd.topIade}</span></div>
+            <div class="lk-stat">Son Sayım: <span style="font-size:11px">${sd.sonT?tarih(sd.sonT):'<span style="color:var(--y)">Yok</span>'}</span></div>
+          </div>
+        </div>`
+      })
+      h+=`</div>`
     })
-    html+=`</tbody></table></div>`
   }
-  html+=`</div>`
-  const nSayimlar=[...state.sayimlar.filter(s=>s.noktaId===noktaId)].sort((a,b)=>new Date(b.tarih)-new Date(a.tarih))
-  html+=`<div class="sec"><div class="sec-baslik">Sayım Geçmişi</div>`
-  if(!nSayimlar.length){html+=`<div class="bos">Henüz sayım yapılmadı.</div>`}
-  else{nSayimlar.forEach(s=>{html+=`<div style="background:var(--card);border:1px solid rgba(124,58,237,.15);border-radius:10px;padding:14px 16px;margin-bottom:10px"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;gap:8px"><strong style="color:#e2e8f0">${tarih(s.tarih)}</strong><button class="btn btn-r btn-sm" onclick="silSayim('${s.id}')">Sil</button></div>${s.not?`<div style="font-size:12px;color:var(--s);margin-bottom:8px">${s.not}</div>`:''}<div style="display:flex;flex-wrap:wrap;gap:8px">${s.kalanlar.map(k=>{const sku=state.skular.find(x=>x.id===k.skuId);return`<div style="background:rgba(124,58,237,.1);border:1px solid rgba(124,58,237,.2);border-radius:6px;padding:4px 12px;font-size:12px">${sku?.model||'?'}: <strong>${k.kalan}</strong></div>`}).join('')}</div></div>`})}
-  html+=`</div>`
-  const nTsl=[...state.teslimalar.filter(t=>t.noktaId===noktaId)].sort((a,b)=>new Date(b.tarih)-new Date(a.tarih))
-  html+=`<div class="sec"><div class="sec-baslik">Teslimat Geçmişi</div>`
-  if(!nTsl.length){html+=`<div class="bos">Henüz teslimat yapılmadı.</div>`}
-  else{html+=`<div class="tbl-wrap"><table class="tbl"><thead><tr>${['Tarih','Ürün','Adet','Birim Fiyat','Not',''].map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${nTsl.map(t=>{const sku=state.skular.find(s=>s.id===t.skuId);return`<tr><td>${tarih(t.tarih)}</td><td>${sku?.model||'?'} (${sku?.kategori||'?'})</td><td><span style="color:var(--g);font-weight:600">+${t.adet}</span></td><td>${tl(t.birimFiyat||sku?.fiyat||75)}</td><td style="color:var(--s)">${t.not||'—'}</td><td><button class="btn btn-r btn-sm" onclick="silTeslimat('${t.id}')">Sil</button></td></tr>`}).join('')}</tbody></table></div>`}
-  html+=`</div>`
-  const nHar=[...state.hareketler.filter(h=>h.noktaId===noktaId)].sort((a,b)=>new Date(b.tarih)-new Date(a.tarih))
-  if(nHar.length){html+=`<div class="sec"><div class="sec-baslik">İade & Geri Alım Geçmişi</div><div class="tbl-wrap"><table class="tbl"><thead><tr>${['Tarih','Tip','Ürün','Adet','Not',''].map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${nHar.map(h=>{const sku=state.skular.find(s=>s.id===h.skuId);const isI=h.tip===IADE;return`<tr><td>${tarih(h.tarih)}</td><td>${badge(isI?'239,68,68':'245,158,11',isI?'İade':'Geri Alım')}</td><td>${sku?.model||'?'} (${sku?.kategori||'?'})</td><td><span style="color:var(--r)">-${h.adet}</span></td><td style="color:var(--s)">${h.not||'—'}</td><td><button class="btn btn-r btn-sm" onclick="silHareket('${h.id}')">Sil</button></td></tr>`}).join('')}</tbody></table></div></div>`}
-  return html
-}
-
-function renderStok(){
-  let html=`<div class="sec"><div class="sec-baslik">Ürün Kataloğu <button class="btn btn-p btn-sm" onclick="modalSku()">+ Ürün Ekle</button></div>`
-  if(!state.skular.length){html+=`<div class="bos"><div class="bos-icon">📦</div>Henüz ürün eklenmedi.<br><span style="font-size:12px">Batman, Jerry, Joker... her model için bir kez ekle.</span></div>`}
-  else{
-    html+=`<div class="tbl-wrap"><table class="tbl"><thead><tr>${['Model','Kategori','Güncel Fiyat','Maliyet','Depoda','Raflarda','Satılan',''].map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>`
-    state.skular.forEach(s=>{
-      const depo=depodakiStok(s.id)
-      const tumRafta=state.noktalar.reduce((acc,n)=>acc+noktaSkuDurum(n.id,s.id).rafta,0)
-      const tumSatilan=state.noktalar.reduce((acc,n)=>acc+noktaSkuDurum(n.id,s.id).satilan,0)
-      html+=`<tr><td><strong style="color:#e2e8f0">${s.model}</strong></td><td>${badge('124,58,237',s.kategori)}</td><td>${tl(s.fiyat)}</td><td>${s.maliyet?tl(s.maliyet):'—'}</td><td><span style="color:${depo===0?'var(--r)':'#2dd4bf'};font-weight:600">${depo}</span></td><td>${tumRafta}</td><td><span style="color:var(--g);font-weight:600">${tumSatilan}</span></td><td><div class="btn-row"><button class="btn btn-gh btn-sm" onclick="modalSku(state.skular.find(s=>s.id==='${s.id}'))">Düzenle</button><button class="btn btn-r btn-sm" onclick="silSku('${s.id}')">Sil</button></div></td></tr>`
-    })
-    html+=`</tbody></table></div>`
-  }
-  html+=`</div><div class="sec"><div class="sec-baslik">Üretim Kayıtları <button class="btn btn-g btn-sm" onclick="modalUretim()">+ Üretim Ekle</button></div>`
-  if(!state.uretimler.length){html+=`<div class="bos">Henüz üretim kaydı yok.</div>`}
-  else{
-    const urSirali=[...state.uretimler].sort((a,b)=>new Date(b.tarih)-new Date(a.tarih))
-    html+=`<div class="tbl-wrap"><table class="tbl"><thead><tr>${['Tarih','Ürün','Kategori','Adet','Not',''].map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${urSirali.map(u=>{const sku=state.skular.find(s=>s.id===u.skuId);return`<tr><td>${tarih(u.tarih)}</td><td>${sku?.model||'Silinmiş'}</td><td>${sku?badge('124,58,237',sku.kategori):'—'}</td><td><span style="color:var(--g);font-weight:600">+${u.adet}</span></td><td style="color:var(--s)">${u.not||'—'}</td><td><button class="btn btn-r btn-sm" onclick="silUretim('${u.id}')">Sil</button></td></tr>`}).join('')}</tbody></table></div>`
-  }
-  return html+`</div>`
-}
-
-function renderPerformans(){
-  if(!state.skular.length)return`<div class="bos"><div class="bos-icon">📈</div>Henüz ürün eklenmedi.</div>`
-  let veriler=state.skular.map(sku=>{
-    const nd=state.noktalar.map(n=>noktaSkuDurum(n.id,sku.id))
-    return{...sku,topSatilan:nd.reduce((s,d)=>s+d.satilan,0),topRafta:nd.reduce((s,d)=>s+d.rafta,0),topGelir:nd.reduce((s,d)=>s+d.gelir,0),topIade:nd.reduce((s,d)=>s+d.toplamIade,0),uretilen:state.uretimler.filter(u=>u.skuId===sku.id).reduce((s,u)=>s+u.adet,0),depo:depodakiStok(sku.id),rotasyon:nd.some(d=>d.rotasyon&&d.rafta>0),aktifNokta:state.noktalar.filter((_,i)=>nd[i].rafta>0).length}
+  h+=`</div>`
+  
+  // Sayım geçmişi
+  const nsyl = [...S.sayimlar.filter(s=>s.noktaId===noktaId)].sort((a,b)=>new Date(b.tarih)-new Date(a.tarih))
+  h+=`<div class="sec"><div class="sec-baslik">Sayım Geçmişi</div>`
+  if(!nsyl.length) h+=`<div class="bos" style="padding:20px">Henüz sayım yapılmadı.</div>`
+  else nsyl.forEach(sy=>{
+    h+=`<div class="liste-kart" style="margin-bottom:8px">
+      <div class="lk-baslik"><span>📊 ${tarih(sy.tarih)}</span><button class="btn btn-r btn-sm" onclick="silSayim('${sy.id}')">Sil</button></div>
+      ${sy.not?`<div style="font-size:11px;color:var(--s);margin-bottom:8px">${sy.not}</div>`:''}
+      <div style="display:flex;flex-wrap:wrap;gap:6px">
+        ${sy.kalanlar.map(k=>{const s=S.skular.find(x=>x.id===k.skuId);return`<div style="background:rgba(124,58,237,.1);border:1px solid rgba(124,58,237,.2);border-radius:5px;padding:3px 10px;font-size:11px">${s?.model||'?'}: <strong>${k.kalan}</strong></div>`}).join('')}
+      </div>
+    </div>`
   })
-  switch(perfSiralama){
-    case 'satilan-azalan':veriler.sort((a,b)=>b.topSatilan-a.topSatilan);break
-    case 'satilan-artan':veriler.sort((a,b)=>a.topSatilan-b.topSatilan);break
-    case 'gelir-azalan':veriler.sort((a,b)=>b.topGelir-a.topGelir);break
-    case 'rafta-azalan':veriler.sort((a,b)=>b.topRafta-a.topRafta);break
-    case 'iade-azalan':veriler.sort((a,b)=>b.topIade-a.topIade);break
+  h+=`</div>`
+  
+  // Teslimat geçmişi
+  const ntsl = [...S.teslimalar.filter(t=>t.noktaId===noktaId)].sort((a,b)=>new Date(b.tarih)-new Date(a.tarih))
+  h+=`<div class="sec"><div class="sec-baslik">Teslimat Geçmişi</div>`
+  if(!ntsl.length) h+=`<div class="bos" style="padding:20px">Henüz teslimat yapılmadı.</div>`
+  else {
+    h+=`<div class="kart-list">`
+    ntsl.forEach(t=>{
+      const sku=S.skular.find(s=>s.id===t.skuId)
+      h+=`<div class="liste-kart">
+        <div class="lk-baslik">
+          <span>${tarih(t.tarih)} — ${sku?.model||'?'} (${sku?.kategori||'?'})</span>
+          <button class="btn btn-r btn-sm" onclick="silTeslimat('${t.id}')">Sil</button>
+        </div>
+        <div class="lk-satirlar">
+          <div class="lk-stat">Adet: <span style="color:var(--g)">+${t.adet}</span></div>
+          <div class="lk-stat">Fiyat: <span>${tl(t.birimFiyat||75)}</span></div>
+          ${t.not?`<div class="lk-stat">Not: <span style="color:var(--s)">${t.not}</span></div>`:''}
+        </div>
+      </div>`
+    })
+    h+=`</div>`
   }
-  let html=`<div class="sec"><div class="sec-baslik"><span>Satış Performansı</span><select onchange="perfSiralama=this.value;render()" style="background:#070710;border:1px solid rgba(124,58,237,.2);border-radius:8px;padding:7px 12px;color:#e2e8f0;font-size:12px;font-family:'DM Sans',sans-serif">
-    <option value="satilan-azalan"${perfSiralama==='satilan-azalan'?' selected':''}>En Çok Satan</option>
-    <option value="satilan-artan"${perfSiralama==='satilan-artan'?' selected':''}>En Az Satan</option>
-    <option value="gelir-azalan"${perfSiralama==='gelir-azalan'?' selected':''}>En Yüksek Gelir</option>
-    <option value="rafta-azalan"${perfSiralama==='rafta-azalan'?' selected':''}>En Çok Rafta</option>
-    <option value="iade-azalan"${perfSiralama==='iade-azalan'?' selected':''}>En Çok İade</option>
-  </select></div><div class="tbl-wrap"><table class="tbl"><thead><tr>${['#','Model','Kategori','Üretilen','Depoda','Raflarda','Satılan','Gelir','İade','Aktif Nokta','Durum'].map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>`
+  h+=`</div>`
+  
+  // İade geçmişi
+  const nhar = [...S.hareketler.filter(h=>h.noktaId===noktaId)].sort((a,b)=>new Date(b.tarih)-new Date(a.tarih))
+  if(nhar.length) {
+    h+=`<div class="sec"><div class="sec-baslik">İade Geçmişi</div><div class="kart-list">`
+    nhar.forEach(hr=>{
+      const sku=S.skular.find(s=>s.id===hr.skuId)
+      h+=`<div class="liste-kart">
+        <div class="lk-baslik">
+          <span>${tarih(hr.tarih)} — ${sku?.model||'?'}</span>
+          <button class="btn btn-r btn-sm" onclick="silHareket('${hr.id}')">Sil</button>
+        </div>
+        <div class="lk-satirlar">
+          <div class="lk-stat">Adet: <span style="color:var(--r)">-${hr.adet}</span></div>
+          ${hr.not?`<div class="lk-stat">Not: <span style="color:var(--s)">${hr.not}</span></div>`:''}
+        </div>
+      </div>`
+    })
+    h+=`</div></div>`
+  }
+  
+  return h
+}
+
+// ===== STOK =====
+function renderStok() {
+  const katlar = ['tumu','çakmak','anahtarlık','yumurta']
+  const filtreliSkular = stokCat==='tumu' ? S.skular : S.skular.filter(s=>s.kategori===stokCat)
+  
+  let h=`<div class="sec">
+    <div class="sec-baslik">Ürün Kataloğu <button class="btn btn-p btn-sm" onclick="mSku()">+ Ürün Ekle</button></div>
+    <div class="urun-cat-bar">
+      ${katlar.map(k=>`<button class="urun-cat-btn${stokCat===k?' active':''}" onclick="stokCat='${k}';render()">${k==='tumu'?'Tümü':k.charAt(0).toUpperCase()+k.slice(1)}</button>`).join('')}
+    </div>`
+  
+  if(!filtreliSkular.length) {
+    h+=`<div class="bos"><div class="bos-icon">📦</div>${S.skular.length?'Bu kategoride ürün yok.':'Henüz ürün eklenmedi.'}</div>`
+  } else {
+    h+=`<div class="kart-list">`
+    filtreliSkular.forEach(s=>{
+      const depo = depodakiStok(s.id)
+      const tumRafta = S.noktalar.reduce((a,n)=>a+nsd(n.id,s.id).rafta,0)
+      const tumSatilan = S.noktalar.reduce((a,n)=>a+nsd(n.id,s.id).satilan,0)
+      const urler = S.uretimler.filter(u=>u.skuId===s.id).sort((a,b)=>new Date(b.tarih)-new Date(a.tarih))
+      const topUretim = urler.reduce((a,u)=>a+u.adet,0)
+      h+=`<div class="liste-kart">
+        <div class="lk-baslik">
+          <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+            <strong>${s.model}</strong>${badge('124,58,237',s.kategori)}
+          </div>
+          <div class="btn-row">
+            <button class="btn btn-gh btn-sm" onclick="mSku(S.skular.find(x=>x.id==='${s.id}'))">Düzenle</button>
+            <button class="btn btn-r btn-sm" onclick="silSku('${s.id}')">Sil</button>
+          </div>
+        </div>
+        <div class="lk-satirlar" style="margin-bottom:10px">
+          <div class="lk-stat">Fiyat: <span>${tl(s.fiyat)}</span></div>
+          <div class="lk-stat">Maliyet: <span>${s.maliyet?tl(s.maliyet):'—'}</span></div>
+          <div class="lk-stat">Depoda: <span style="color:${depo===0?'var(--r)':'#2dd4bf'}">${depo}</span></div>
+          <div class="lk-stat">Raflarda: <span>${tumRafta}</span></div>
+          <div class="lk-stat">Satılan: <span style="color:var(--g)">${tumSatilan}</span></div>
+          <div class="lk-stat">Toplam üretim: <span>${topUretim}</span></div>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center;margin-bottom:${urler.length?'8px':'0'}">
+          <button class="btn btn-g btn-sm" onclick="mUretim('${s.id}')">+ Üretim Ekle</button>
+        </div>
+        ${urler.length?`<div class="uretim-liste">${urler.slice(0,3).map(u=>`<div class="uretim-item"><span style="color:#6ee7b7">+${u.adet} adet</span><span style="color:var(--s)">${tarih(u.tarih)}</span>${u.not?`<span style="color:var(--s);font-size:10px">${u.not}</span>`:''}<button class="btn btn-r btn-sm" onclick="silUretim('${u.id}')">Sil</button></div>`).join('')}${urler.length>3?`<div style="font-size:11px;color:var(--s);padding:4px 10px">+${urler.length-3} kayıt daha</div>`:''}</div>`:''}
+      </div>`
+    })
+    h+=`</div>`
+  }
+  return h+`</div>`
+}
+
+// ===== PERFORMANS =====
+function renderPerformans() {
+  if(!S.skular.length) return `<div class="bos"><div class="bos-icon">📈</div>Henüz ürün eklenmedi.</div>`
+  
+  let veriler = S.skular.map(sku=>{
+    const nd = S.noktalar.map(n=>nsd(n.id,sku.id))
+    return {...sku, topSat:nd.reduce((s,d)=>s+d.satilan,0), topRaf:nd.reduce((s,d)=>s+d.rafta,0), topGel:nd.reduce((s,d)=>s+d.gelir,0), topIade:nd.reduce((s,d)=>s+d.topIade,0), uretilen:S.uretimler.filter(u=>u.skuId===sku.id).reduce((s,u)=>s+u.adet,0), depo:depodakiStok(sku.id), rotasyon:nd.some(d=>d.rotasyon&&d.rafta>0), aktifN:S.noktalar.filter((_,i)=>nd[i].rafta>0).length}
+  })
+  
+  switch(perfSira) {
+    case 'satilan': veriler.sort((a,b)=>b.topSat-a.topSat); break
+    case 'az-satan': veriler.sort((a,b)=>a.topSat-b.topSat); break
+    case 'gelir': veriler.sort((a,b)=>b.topGel-a.topGel); break
+    case 'rafta': veriler.sort((a,b)=>b.topRaf-a.topRaf); break
+  }
+  
+  let h=`<div class="sec"><div class="sec-baslik"><span>Performans</span>
+    <select onchange="perfSira=this.value;render()" style="background:#070710;border:1px solid var(--border);border-radius:8px;padding:6px 10px;color:#e2e8f0;font-size:12px">
+      <option value="satilan"${perfSira==='satilan'?' selected':''}>En Çok Satan</option>
+      <option value="az-satan"${perfSira==='az-satan'?' selected':''}>En Az Satan</option>
+      <option value="gelir"${perfSira==='gelir'?' selected':''}>En Yüksek Gelir</option>
+      <option value="rafta"${perfSira==='rafta'?' selected':''}>En Çok Rafta</option>
+    </select>
+  </div><div class="kart-list">`
+  
   veriler.forEach((m,i)=>{
-    const db=m.rotasyon&&m.topRafta>0?badge('245,158,11','⚠️ Rotasyon'):m.depo===0&&m.topRafta===0?badge('100,116,139','Tükenmiş'):badge('16,185,129','Aktif')
-    const sira=i===0&&m.topSatilan>0&&perfSiralama==='satilan-azalan'?'🏆':i+1
-    html+=`<tr style="${i===0&&m.topSatilan>0&&perfSiralama==='satilan-azalan'?'background:rgba(16,185,129,.04)':''}"><td style="color:var(--s)">${sira}</td><td><strong style="color:#e2e8f0">${m.model}</strong></td><td>${badge('124,58,237',m.kategori)}</td><td>${m.uretilen}</td><td><span style="color:${m.depo===0?'var(--r)':'#2dd4bf'};font-weight:600">${m.depo}</span></td><td>${m.topRafta}</td><td><strong style="color:var(--g);font-size:15px">${m.topSatilan}</strong></td><td><span style="color:var(--p);font-weight:600">${tl(m.topGelir)}</span></td><td>${m.topIade}</td><td>${m.aktifNokta}</td><td>${db}</td></tr>`
+    const db = m.rotasyon&&m.topRaf>0?badge('245,158,11','⚠️ Rotasyon'):m.depo===0&&m.topRaf===0?badge('100,116,139','Tükenmiş'):badge('16,185,129','Aktif')
+    const sira = i===0&&m.topSat>0&&perfSira==='satilan'?'🏆':`#${i+1}`
+    h+=`<div class="liste-kart" style="${i===0&&m.topSat>0&&perfSira==='satilan'?'border-color:rgba(16,185,129,.3)':''}">
+      <div class="lk-baslik">
+        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+          <span style="color:var(--s);font-size:12px">${sira}</span>
+          <strong>${m.model}</strong>${badge('124,58,237',m.kategori)}${db}
+        </div>
+        <span style="color:var(--g);font-family:'Syne',sans-serif;font-weight:700;font-size:18px">${m.topSat}</span>
+      </div>
+      <div class="lk-satirlar">
+        <div class="lk-stat">Gelir: <span style="color:var(--p)">${tl(m.topGel)}</span></div>
+        <div class="lk-stat">Rafta: <span>${m.topRaf}</span></div>
+        <div class="lk-stat">Depoda: <span style="color:${m.depo===0?'var(--r)':'#2dd4bf'}">${m.depo}</span></div>
+        <div class="lk-stat">Üretilen: <span>${m.uretilen}</span></div>
+        <div class="lk-stat">İade: <span>${m.topIade}</span></div>
+        <div class="lk-stat">Aktif Nokta: <span>${m.aktifN}</span></div>
+      </div>
+    </div>`
   })
-  return html+`</tbody></table></div></div>`
+  return h+`</div></div>`
 }
 
-function renderGecmis(){
-  const all=[
-    ...state.uretimler.map(u=>{const sku=state.skular.find(s=>s.id===u.skuId);return{id:u.id,tarih:u.tarih,tip:'Üretim',renk:'16,185,129',icon:'🏭',aciklama:`${sku?.model||'?'} (${sku?.kategori||'?'}) — +${u.adet} adet`,not:u.not}}),
-    ...state.teslimalar.map(t=>{const sku=state.skular.find(s=>s.id===t.skuId);const nokta=state.noktalar.find(n=>n.id===t.noktaId);return{id:t.id,tarih:t.tarih,tip:'Teslimat',renk:'14,165,233',icon:'📦',aciklama:`${sku?.model||'?'} → ${nokta?.ad||'?'} — ${t.adet} adet @ ${tl(t.birimFiyat||75)}`,not:t.not}}),
-    ...state.sayimlar.map(s=>{const nokta=state.noktalar.find(n=>n.id===s.noktaId);return{id:s.id,tarih:s.tarih,tip:'Sayım',renk:'124,58,237',icon:'📊',aciklama:`${nokta?.ad||'?'} — ${s.kalanlar.length} ürün sayıldı`,not:s.not}}),
-    ...state.hareketler.map(h=>{const sku=state.skular.find(s=>s.id===h.skuId);const nokta=state.noktalar.find(n=>n.id===h.noktaId);const isI=h.tip===IADE;return{id:h.id,tarih:h.tarih,tip:isI?'İade':'Geri Alım',renk:isI?'239,68,68':'245,158,11',icon:isI?'↩️':'🔄',aciklama:`${sku?.model||'?'} ← ${nokta?.ad||'?'} — ${h.adet} adet`,not:h.not}})
+// ===== GEÇMİŞ =====
+function renderGecmis() {
+  const all = [
+    ...S.uretimler.map(u=>{const s=S.skular.find(x=>x.id===u.skuId);return{id:u.id,tarih:u.tarih,tip:'Üretim',renk:'16,185,129',icon:'🏭',ac:`${s?.model||'?'} — +${u.adet} adet`,not:u.not}}),
+    ...S.teslimalar.map(t=>{const s=S.skular.find(x=>x.id===t.skuId);const n=S.noktalar.find(x=>x.id===t.noktaId);return{id:t.id,tarih:t.tarih,tip:'Teslimat',renk:'14,165,233',icon:'📦',ac:`${s?.model||'?'} → ${n?.ad||'?'} — ${t.adet} adet @ ${tl(t.birimFiyat||75)}`,not:t.not}}),
+    ...S.sayimlar.map(s=>{const n=S.noktalar.find(x=>x.id===s.noktaId);return{id:s.id,tarih:s.tarih,tip:'Sayım',renk:'124,58,237',icon:'📊',ac:`${n?.ad||'?'} — ${s.kalanlar.length} ürün`,not:s.not}}),
+    ...S.hareketler.map(h=>{const s=S.skular.find(x=>x.id===h.skuId);const n=S.noktalar.find(x=>x.id===h.noktaId);return{id:h.id,tarih:h.tarih,tip:'İade',renk:'239,68,68',icon:'↩️',ac:`${s?.model||'?'} ← ${n?.ad||'?'} — ${h.adet} adet`,not:h.not}})
   ].sort((a,b)=>new Date(b.tarih)-new Date(a.tarih))
-  if(!all.length)return`<div class="bos"><div class="bos-icon">🕐</div>Henüz hareket kaydı yok.</div>`
-  let html=`<div class="sec"><div class="sec-baslik">Tüm Hareketler (${all.length})</div>`
-  all.forEach(h=>{html+=`<div class="log-item" style="border:1px solid rgba(${h.renk},.2)"><div style="font-size:18px;flex-shrink:0">${h.icon}</div><div style="flex:1;min-width:0"><div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">${badge(h.renk,h.tip)}<span style="color:#e2e8f0;font-size:13px">${h.aciklama}</span></div>${h.not?`<div style="font-size:11px;color:var(--s);margin-top:4px">${h.not}</div>`:''}</div><div style="font-size:11px;color:#475569;white-space:nowrap">${tarih(h.tarih)}</div></div>`})
-  return html+`</div>`
+  
+  if(!all.length) return `<div class="bos"><div class="bos-icon">🕐</div>Henüz kayıt yok.</div>`
+  
+  let h=`<div class="sec"><div class="sec-baslik">Tüm Hareketler (${all.length})</div><div class="kart-list">`
+  all.forEach(x=>{
+    h+=`<div class="log-item" style="background:var(--card);border:1px solid rgba(${x.renk},.2);border-radius:10px;padding:12px 14px;display:flex;align-items:flex-start;gap:12px;margin-bottom:8px">
+      <span style="font-size:16px;flex-shrink:0">${x.icon}</span>
+      <div style="flex:1;min-width:0">
+        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:2px">${badge(x.renk,x.tip)}<span style="font-size:13px;color:#e2e8f0">${x.ac}</span></div>
+        ${x.not?`<div style="font-size:11px;color:var(--s)">${x.not}</div>`:''}
+      </div>
+      <div style="font-size:11px;color:#475569;white-space:nowrap">${tarih(x.tarih)}</div>
+    </div>`
+  })
+  return h+`</div></div>`
 }
 
-function render(){
-  let html=''
-  if(aktifSekme==='genel')html=renderGenel()
-  else if(aktifSekme==='noktalar')html=renderNoktalar()
-  else if(aktifSekme==='stok')html=renderStok()
-  else if(aktifSekme==='performans')html=renderPerformans()
-  else if(aktifSekme==='gecmis')html=renderGecmis()
-  document.getElementById('content').innerHTML=html
+// ===== MODALLAR =====
+
+// Nokta ekle/düzenle
+function mNokta(d=null) {
+  mc(`<div class="modal">
+    <div class="modal-baslik">${d?'Nokta Düzenle':'Nokta Ekle'} <button onclick="kmc()">×</button></div>
+    <div class="fg"><label>Nokta Adı *</label><input id="n-ad" value="${d?.ad||''}" placeholder="Erkut Abi Büfesi"></div>
+    <div class="fg"><label>Konum</label><input id="n-kon" value="${d?.konum||''}" placeholder="Çarşı..."></div>
+    <div class="fg"><label>Durum</label><select id="n-dur"><option value="aktif"${d?.durum==='aktif'||!d?' selected':''}>Aktif</option><option value="pasif"${d?.durum==='pasif'?' selected':''}>Pasif</option></select></div>
+    <div class="btn-row" style="justify-content:flex-end;margin-top:8px">
+      <button class="btn btn-gh" onclick="kmc()">İptal</button>
+      <button class="btn btn-p" onclick="kaydetNokta('${d?.id||''}')">Kaydet</button>
+    </div>
+  </div>`)
+}
+function kaydetNokta(id) {
+  const ad=document.getElementById('n-ad').value.trim()
+  if(!ad){alert('Nokta adı zorunlu');return}
+  const obj={ad,konum:document.getElementById('n-kon').value.trim(),durum:document.getElementById('n-dur').value}
+  if(id) S.noktalar=S.noktalar.map(n=>n.id===id?{...n,...obj}:n)
+  else S.noktalar.push({id:uid(),...obj})
+  kaydet();kmc();render()
+}
+function silNokta(id) {
+  const n=S.noktalar.find(x=>x.id===id)
+  if(!confirm(`"${n.ad}" silinecek. Tüm veriler silinir. Devam?`))return
+  S.noktalar=S.noktalar.filter(x=>x.id!==id)
+  S.teslimalar=S.teslimalar.filter(x=>x.noktaId!==id)
+  S.sayimlar=S.sayimlar.filter(x=>x.noktaId!==id)
+  S.hareketler=S.hareketler.filter(x=>x.noktaId!==id)
+  aktifNokta=null; kaydet();render()
 }
 
-loadState().then(()=>render())
+// Nokta Kapat
+function mKapat(noktaId) {
+  const n=S.noktalar.find(x=>x.id===noktaId)
+  const d=noktaToplam(noktaId)
+  mc(`<div class="modal">
+    <div class="modal-baslik">Noktayı Kapat <button onclick="kmc()">×</button></div>
+    <div class="basari-info">Bu nokta pasife alınacak. Veriler silinmez, arşivlenir.</div>
+    <div class="liste-kart" style="margin-bottom:16px">
+      <div class="lk-baslik"><strong>${n.ad}</strong></div>
+      <div class="lk-satirlar">
+        <div class="lk-stat">Toplam Satılan: <span style="color:var(--g)">${d.satilan} adet</span></div>
+        <div class="lk-stat">Toplam Gelir: <span style="color:var(--p)">${tl(d.gelir)}</span></div>
+        <div class="lk-stat">Rafta Kalan: <span style="color:var(--o)">${d.rafta} adet</span></div>
+        <div class="lk-stat">İade Alınan: <span>${d.iade} adet</span></div>
+      </div>
+    </div>
+    <div class="uyari-info" style="margin-bottom:16px">⚠️ Rafta ${d.rafta} ürün hâlâ bu noktada görünüyor. Önce iade alman önerilir.</div>
+    <div class="btn-row" style="justify-content:flex-end">
+      <button class="btn btn-gh" onclick="kmc()">İptal</button>
+      <button class="btn btn-r" onclick="kapatNokta('${noktaId}')">Noktayı Kapat</button>
+    </div>
+  </div>`)
+}
+function kapatNokta(id) {
+  S.noktalar=S.noktalar.map(n=>n.id===id?{...n,durum:'pasif'}:n)
+  kaydet();kmc();aktifNokta=null;render()
+}
+
+// SKU ekle/düzenle
+function mSku(d=null) {
+  mc(`<div class="modal">
+    <div class="modal-baslik">${d?'Ürün Düzenle':'Yeni Ürün'} <button onclick="kmc()">×</button></div>
+    ${d&&S.teslimalar.some(t=>t.skuId===d.id)?'<div class="uyari-info">💡 Fiyat değişikliği sadece yeni teslimatları etkiler.</div>':''}
+    <div class="fg"><label>Model Adı *</label><input id="s-m" value="${d?.model||''}" placeholder="Batman, Jerry..."></div>
+    <div class="fg"><label>Kategori</label><select id="s-k">${KATS.map(k=>`<option value="${k}"${d?.kategori===k?' selected':''}>${k.charAt(0).toUpperCase()+k.slice(1)}</option>`).join('')}</select></div>
+    <div class="fg"><label>Satış Fiyatı (TL)</label><input id="s-f" type="number" value="${d?.fiyat||75}"></div>
+    <div class="fg"><label>Maliyet (TL)</label><input id="s-ml" type="number" value="${d?.maliyet||''}" placeholder="Opsiyonel"></div>
+    <div class="btn-row" style="justify-content:flex-end;margin-top:8px">
+      <button class="btn btn-gh" onclick="kmc()">İptal</button>
+      <button class="btn btn-p" onclick="kaydetSku('${d?.id||''}')">Kaydet</button>
+    </div>
+  </div>`)
+}
+function kaydetSku(id) {
+  const model=document.getElementById('s-m').value.trim()
+  if(!model){alert('Model adı zorunlu');return}
+  const obj={model,kategori:document.getElementById('s-k').value,fiyat:parseFloat(document.getElementById('s-f').value)||75,maliyet:parseFloat(document.getElementById('s-ml').value)||0}
+  if(id) S.skular=S.skular.map(s=>s.id===id?{...s,...obj}:s)
+  else S.skular.push({id:uid(),...obj})
+  kaydet();kmc();render()
+}
+function silSku(id) {
+  const s=S.skular.find(x=>x.id===id)
+  const bag=S.uretimler.filter(u=>u.skuId===id).length+S.teslimalar.filter(t=>t.skuId===id).length
+  if(!confirm(`"${s.model}" silinecek.${bag?`\n${bag} bağlı kayıt "Silinmiş" olarak görünecek.`:''}\nDevam?`))return
+  S.skular=S.skular.filter(x=>x.id!==id); kaydet();render()
+}
+
+// Üretim ekle
+function mUretim(skuId=null) {
+  if(!S.skular.length){alert('Önce ürün ekleyin');return}
+  mc(`<div class="modal">
+    <div class="modal-baslik">Üretim Ekle <button onclick="kmc()">×</button></div>
+    <div class="info-box">🏭 Üretilen ürünler depoya girer.</div>
+    <div class="fg"><label>Ürün *</label><select id="ur-s">${S.skular.map(s=>`<option value="${s.id}"${s.id===skuId?' selected':''}>${s.model} (${s.kategori})</option>`).join('')}</select></div>
+    <div class="fg"><label>Adet *</label><input id="ur-a" type="number" min="1" placeholder="13"></div>
+    <div class="fg"><label>Tarih</label><input id="ur-t" type="date" value="${bugun()}"></div>
+    <div class="fg"><label>Not</label><textarea id="ur-n" placeholder="Plaka notu..."></textarea></div>
+    <div class="btn-row" style="justify-content:flex-end;margin-top:8px">
+      <button class="btn btn-gh" onclick="kmc()">İptal</button>
+      <button class="btn btn-g" onclick="kaydetUretim()">Kaydet</button>
+    </div>
+  </div>`)
+}
+function kaydetUretim() {
+  const adet=parseInt(document.getElementById('ur-a').value)
+  if(!adet||adet<=0){alert('Geçerli adet girin');return}
+  S.uretimler.push({id:uid(),skuId:document.getElementById('ur-s').value,adet,tarih:document.getElementById('ur-t').value,not:document.getElementById('ur-n').value})
+  kaydet();kmc();render()
+}
+function silUretim(id) {
+  if(!confirm('Bu üretim kaydı silinecek.'))return
+  S.uretimler=S.uretimler.filter(x=>x.id!==id);kaydet();render()
+}
+
+// Toplu Teslimat
+function mTeslimat(noktaId) {
+  if(!S.skular.length){alert('Önce ürün ekleyin');return}
+  const katlar=['çakmak','anahtarlık','yumurta']
+  let aktifCat = 'çakmak'
+  const ilk = S.skular.find(s=>s.kategori==='çakmak')
+  if(!ilk) aktifCat = S.skular[0]?.kategori||'çakmak'
+  
+  function buildModal(cat) {
+    const filtSku = S.skular.filter(s=>s.kategori===cat)
+    const satirlar = filtSku.map(s=>{
+      const stk=depodakiStok(s.id)
+      return `<div class="tt-satir">
+        <div class="tt-isim">${s.model}<br><span class="tt-stok">Depoda: ${stk}</span></div>
+        <input type="number" id="tt-${s.id}" min="0" placeholder="0" ${stk===0?'disabled style="opacity:.4"':''}
+          style="background:#070710;border:1px solid rgba(124,58,237,.2);border-radius:6px;color:#e2e8f0;outline:none;width:64px;text-align:center;padding:7px 6px">
+      </div>`
+    }).join('')
+    
+    document.getElementById('mc').innerHTML=`<div class="overlay" onclick="if(event.target===this)kmc()"><div class="modal">
+      <div class="modal-baslik">Teslimat Ekle <button onclick="kmc()">×</button></div>
+      <div class="info-box">📦 Yanına adet girdiğin ürünler stoktan düşer, rafa eklenir.</div>
+      <div class="cat-tabs">
+        ${katlar.map(k=>`<button class="cat-tab${k===cat?' active':''}" onclick="mTeslimatCat('${noktaId}','${k}')">${k.charAt(0).toUpperCase()+k.slice(1)}</button>`).join('')}
+      </div>
+      <div style="max-height:300px;overflow-y:auto">${filtSku.length?satirlar:`<div class="bos" style="padding:20px">Bu kategoride ürün yok.</div>`}</div>
+      <div class="fg" style="margin-top:12px"><label>Tarih</label><input id="tt-tarih" type="date" value="${bugun()}"></div>
+      <div class="fg"><label>Not</label><textarea id="tt-not" placeholder="Opsiyonel..."></textarea></div>
+      <div class="btn-row" style="justify-content:flex-end;margin-top:8px">
+        <button class="btn btn-gh" onclick="kmc()">İptal</button>
+        <button class="btn btn-g" onclick="kaydetTeslimat('${noktaId}','${cat}')">Onayla</button>
+      </div>
+    </div></div>`
+  }
+  
+  window.mTeslimatCat = (nId, cat) => buildModal(cat, nId)
+  buildModal(aktifCat)
+}
+
+function kaydetTeslimat(noktaId, cat) {
+  const filtSku=S.skular.filter(s=>s.kategori===cat)
+  const tarihVal=document.getElementById('tt-tarih').value
+  const notVal=document.getElementById('tt-not').value
+  let eklendi=0
+  filtSku.forEach(s=>{
+    const el=document.getElementById('tt-'+s.id)
+    if(!el)return
+    const adet=parseInt(el.value)||0
+    if(adet<=0)return
+    const stk=depodakiStok(s.id)
+    if(adet>stk){alert(`${s.model}: depoda ${stk} adet var, ${adet} girilemez`);return}
+    S.teslimalar.push({id:uid(),noktaId,skuId:s.id,adet,birimFiyat:s.fiyat,tarih:tarihVal,not:notVal})
+    eklendi++
+  })
+  if(eklendi===0){alert('En az bir ürüne adet girin');return}
+  kaydet();kmc();render()
+}
+
+// Stand Yenile (Sayım + İade)
+function mStandYenile(noktaId) {
+  const skuIdler=[...new Set(S.teslimalar.filter(t=>t.noktaId===noktaId).map(t=>t.skuId))]
+  if(!skuIdler.length){alert('Bu noktaya henüz teslimat yapılmadı');return}
+  
+  const satirlar=skuIdler.map(sid=>{
+    const s=S.skular.find(x=>x.id===sid)
+    const d=nsd(noktaId,sid)
+    if(d.rafta===0)return''
+    return`<div class="sy-satir">
+      <div class="sy-isim"><strong>${s?.model||'?'}</strong><span>${s?.kategori} — Sistemde: ${d.rafta}</span></div>
+      <input type="number" id="sy-${sid}" value="${d.rafta}" min="0" style="background:#070710;border:1px solid rgba(124,58,237,.2);border-radius:6px;color:#e2e8f0;outline:none">
+      <label class="sy-birak"><input type="checkbox" id="bk-${sid}"> Bırak</label>
+    </div>`
+  }).filter(Boolean).join('')
+  
+  mc(`<div class="modal">
+    <div class="modal-baslik">🔄 Stand Yenile <button onclick="kmc()">×</button></div>
+    <div class="info-box">Rafta gerçek kalan adeti girin.<br>• <strong>Bırak</strong> işaretli → noktada kalır, stoka dönmez<br>• İşaretsiz → stoka iade alınır</div>
+    <div class="fg"><label>Tarih</label><input id="sy-tarih" type="date" value="${bugun()}"></div>
+    <div style="max-height:300px;overflow-y:auto;margin-bottom:12px">${satirlar||'<div class="bos" style="padding:20px">Rafta ürün yok.</div>'}</div>
+    <div class="fg"><label>Not</label><textarea id="sy-not" placeholder="Sayım notu..."></textarea></div>
+    <div class="btn-row" style="justify-content:flex-end;margin-top:8px">
+      <button class="btn btn-gh" onclick="kmc()">İptal</button>
+      <button class="btn btn-p" onclick="kaydetStandYenile('${noktaId}','${skuIdler.join(',')}')">Onayla</button>
+    </div>
+  </div>`)
+}
+
+function kaydetStandYenile(noktaId, skuIdsStr) {
+  const skuIdler=skuIdsStr.split(',')
+  const tarihVal=document.getElementById('sy-tarih').value
+  const notVal=document.getElementById('sy-not').value
+  const kalanlar=[]
+  
+  skuIdler.forEach(sid=>{
+    const el=document.getElementById('sy-'+sid)
+    if(!el)return
+    const kalan=parseInt(el.value)||0
+    kalanlar.push({skuId:sid, kalan})
+    
+    const birak=document.getElementById('bk-'+sid)?.checked
+    if(!birak && kalan>0) {
+      // İade al
+      S.hareketler.push({id:uid(),noktaId,skuId:sid,adet:kalan,tip:IADE,tarih:tarihVal,not:notVal})
+    }
+    // Bırak işaretliyse iade yok, rafta kalır (sayım bunu gösterir)
+  })
+  
+  // Sayım kaydet
+  if(kalanlar.length>0) {
+    S.sayimlar.push({id:uid(),noktaId,tarih:tarihVal,not:notVal,kalanlar})
+  }
+  
+  kaydet();kmc();render()
+}
+
+// İade (tekil)
+function mIade(noktaId) {
+  const raftaOlanlar=S.skular.filter(s=>nsd(noktaId,s.id).rafta>0)
+  if(!raftaOlanlar.length){alert('Bu noktada rafta ürün yok');return}
+  mc(`<div class="modal">
+    <div class="modal-baslik">↩️ İade Ekle <button onclick="kmc()">×</button></div>
+    <div class="info-box">Nokta satılmayan ürünleri iade verdi — stoka döner.</div>
+    <div class="fg"><label>Ürün *</label><select id="ir-s">${raftaOlanlar.map(s=>{const d=nsd(noktaId,s.id);return`<option value="${s.id}">${s.model} (${s.kategori}) — Rafta: ${d.rafta}</option>`}).join('')}</select></div>
+    <div class="fg"><label>Adet *</label><input id="ir-a" type="number" min="1"></div>
+    <div class="fg"><label>Tarih</label><input id="ir-t" type="date" value="${bugun()}"></div>
+    <div class="fg"><label>Not</label><textarea id="ir-n" placeholder="Opsiyonel..."></textarea></div>
+    <div class="btn-row" style="justify-content:flex-end;margin-top:8px">
+      <button class="btn btn-gh" onclick="kmc()">İptal</button>
+      <button class="btn btn-y" onclick="kaydetIade('${noktaId}')">Kaydet</button>
+    </div>
+  </div>`)
+}
+function kaydetIade(noktaId) {
+  const skuId=document.getElementById('ir-s').value
+  const adet=parseInt(document.getElementById('ir-a').value)
+  if(!adet||adet<=0){alert('Geçerli adet girin');return}
+  const d=nsd(noktaId,skuId)
+  if(adet>d.rafta){alert(`Rafta sadece ${d.rafta} adet var`);return}
+  S.hareketler.push({id:uid(),noktaId,skuId,adet,tip:IADE,tarih:document.getElementById('ir-t').value,not:document.getElementById('ir-n').value})
+  kaydet();kmc();render()
+}
+function silHareket(id){if(!confirm('Silinsin mi?'))return;S.hareketler=S.hareketler.filter(x=>x.id!==id);kaydet();render()}
+function silSayim(id){if(!confirm('Bu sayım silinecek. Satış hesaplarını etkiler.'))return;S.sayimlar=S.sayimlar.filter(x=>x.id!==id);kaydet();render()}
+function silTeslimat(id){if(!confirm('Bu teslimat silinecek.'))return;S.teslimalar=S.teslimalar.filter(x=>x.id!==id);kaydet();render()}
+
+// ===== RENDER =====
+function render() {
+  let h=''
+  if(aktifSekme==='genel') h=renderGenel()
+  else if(aktifSekme==='noktalar') h=renderNoktalar()
+  else if(aktifSekme==='stok') h=renderStok()
+  else if(aktifSekme==='performans') h=renderPerformans()
+  else if(aktifSekme==='gecmis') h=renderGecmis()
+  document.getElementById('content').innerHTML=h
+}
+
+load().then(()=>render())
 </script>
 </body>
 </html>
